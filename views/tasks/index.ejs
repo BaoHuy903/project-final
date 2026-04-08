@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <h1>Chào mừng bạn đến với Dashboard!</h1>
+    <% if (user) { %>
+        <p>Xin chào, <strong><%= user.username %></strong>!</p>
+        <a href="/users/logout">Đăng xuất</a>
+    <% } else { %>
+        <a href="/users/login">Đăng nhập để xem nội dung</a>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

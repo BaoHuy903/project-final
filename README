@@ -1,0 +1,8 @@
+#1
+create data task_manager
+
+#2
+npm install express mongoose ejs dotenv express-session bcryptjs
+
+#3
+node app.js

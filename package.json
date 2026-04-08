@@ -9,5 +9,22 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaoHuy903/project-final.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BaoHuy903/project-final/issues"
+  },
+  "homepage": "https://github.com/BaoHuy903/project-final#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^17.4.1",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.4.1"
+  }
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký</title>
+</head>
+<body>
+    <h2>Đăng Ký Tài Khoản</h2>
+    <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+    <form action="/users/register" method="POST">
+        <div>
+            <label>Tên đăng nhập:</label>
+            <input type="text" name="username" required>
+        </div>
+        <div>
+            <label>Mật khẩu:</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Đăng Ký</button>
+    </form>
+    <p>Đã có tài khoản? <a href="/users/login">Đăng nhập ngay</a></p>
+</body>
+</html>
