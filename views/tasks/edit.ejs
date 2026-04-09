@@ -1,27 +1,47 @@
 <%- include('../partials/header') %>
-
 <div class="container mt-4 mb-5" style="max-width: 600px;">
-    <h2>Cập nhật công việc</h2>
-    <form action="/edit/<%= task._id %>" method="POST" class="mt-3">
-        <div class="mb-3">
-            <label class="form-label">Tên công việc <span class="text-danger">*</span></label>
-            <input type="text" name="title" class="form-control" value="<%= task.title %>" required>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Cập nhật công việc</h4>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Mô tả</label>
-            <textarea name="description" class="form-control" rows="3"><%= task.description %></textarea>
+        <div class="card-body">
+            <form action="/edit/<%= task._id %>" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tên công việc <span class="text-danger">*</span></label>
+                    <input type="text" name="title" class="form-control" value="<%= task.title %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Mô tả</label>
+                    <textarea name="description" class="form-control" rows="3"><%= task.description %></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Trạng thái</label>
+                        <select name="status" class="form-select">
+                            <option value="Chưa làm" <%= task.status === 'Chưa làm' ? 'selected' : '' %>>Chưa làm</option>
+                            <option value="Đang làm" <%= task.status === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
+                            <option value="Hoàn thành" <%= task.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Hạn chót</label>
+                        <% 
+                            // Chuyển đổi định dạng ngày để hiển thị vào thẻ input type="date"
+                            let dateValue = '';
+                            if (task.dueDate) {
+                                const d = new Date(task.dueDate);
+                                dateValue = d.toISOString().split('T')[0];
+                            }
+                        %>
+                        <input type="date" name="dueDate" class="form-control" value="<%= dateValue %>">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <a href="/" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Trạng thái</label>
-            <select name="status" class="form-select">
-                <option value="Chưa làm" <%= task.status === 'Chưa làm' ? 'selected' : '' %>>Chưa làm</option>
-                <option value="Đang làm" <%= task.status === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
-                <option value="Hoàn thành" <%= task.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="/" class="btn btn-secondary">Hủy</a>
-    </form>
+    </div>
 </div>
-
 <%- include('../partials/footer') %>

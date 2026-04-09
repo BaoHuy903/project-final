@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const connectDB = require('./config/db');
+const flash = require('connect-flash');
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
@@ -30,6 +31,15 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 } // Cookie sống 1 ngày
 }));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.username = req.session?.username || null; // Cấu hình luôn username cho gọn
+    next();
+});
 
 // Gắn Routes
 app.use('/users', userRoutes);

@@ -4,7 +4,7 @@ const taskSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
     status: { type: String, enum: ['Chưa làm', 'Đang làm', 'Hoàn thành'], default: 'Chưa làm' },
-    // Liên kết công việc này với ID của user đã tạo ra nó
+    dueDate: { type: Date }, // TÍNH NĂNG MỚI: Hạn chót
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
