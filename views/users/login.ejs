@@ -1,25 +1,25 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Đăng Nhập</title>
-</head>
-<body>
-    <h2>Đăng Nhập</h2>
-    <% if (error) { %>
-        <p style="color: red;"><%= error %></p>
-    <% } %>
-    <form action="/users/login" method="POST">
-        <div>
-            <label>Tên đăng nhập:</label>
-            <input type="text" name="username" required>
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="auth-form"> <h2>Đăng Nhập</h2>
+        <% if (error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <form action="/users/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập:</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng Nhập</button>
+        </form>
+        <div class="text-center mt-3">
+            Chưa có tài khoản? <a href="/users/register">Đăng ký ngay</a>
         </div>
-        <div>
-            <label>Mật khẩu:</label>
-            <input type="password" name="password" required>
-        </div>
-        <button type="submit">Đăng Nhập</button>
-    </form>
-    <p>Chưa có tài khoản? <a href="/users/register">Đăng ký ngay</a></p>
-</body>
-</html>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

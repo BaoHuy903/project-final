@@ -1,13 +1,45 @@
 <%- include('../partials/header') %>
 
-<div class="container">
-    <h1>Chào mừng bạn đến với Dashboard!</h1>
-    <% if (user) { %>
-        <p>Xin chào, <strong><%= user.username %></strong>!</p>
-        <a href="/users/logout">Đăng xuất</a>
-    <% } else { %>
-        <a href="/users/login">Đăng nhập để xem nội dung</a>
-    <% } %>
+<div class="p-5 bg-primary text-white text-center mb-5">
+    <h1 class="display-5 fw-bold">Chào mừng bạn đến với Task Manager</h1>
+    <p class="lead">Nâng cao năng suất, quản lý công việc hiệu quả và dễ dàng hơn.</p>
+</div>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Danh sách công việc của bạn</h2>
+        <div>
+            <a href="/new" class="btn btn-success">+ Thêm công việc</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <% if (tasks.length === 0) { %>
+            <div class="col-12">
+                <div class="alert alert-info">Bạn chưa có công việc nào. Hãy thêm mới nhé!</div>
+            </div>
+        <% } else { %>
+            <% tasks.forEach(task => { %>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= task.title %></h5>
+                            <p class="card-text text-muted"><%= task.description || 'Không có mô tả' %></p>
+                            <span class="badge bg-<%= task.status === 'Hoàn thành' ? 'success' : (task.status === 'Đang làm' ? 'warning text-dark' : 'secondary') %>">
+                                <%= task.status %>
+                            </span>
+                        </div>
+                        <div class="card-footer bg-white d-flex justify-content-between">
+                            <a href="/edit/<%= task._id %>" class="btn btn-sm btn-primary">Sửa</a>
+                            <form action="/delete/<%= task._id %>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
 </div>
 
 <%- include('../partials/footer') %>

@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
+app.use(express.urlencoded({ extended: true }));
+
 // Cấu hình Session
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -30,6 +33,7 @@ app.use(session({
 
 // Gắn Routes
 app.use('/users', userRoutes);
+app.use('/', taskRoutes);
 
 // Route Trang chủ tạm thời để test đăng nhập/đăng xuất
 app.get('/', (req, res) => {

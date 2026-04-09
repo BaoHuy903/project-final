@@ -1,0 +1,84 @@
+/* Tùy chỉnh chung để Footer luôn ở dưới đáy trang */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn trang */
+}
+
+/* Đẩy nội dung chính giãn ra để ép footer xuống */
+.container {
+    flex: 1;
+}
+
+/* Tùy chỉnh form Đăng nhập / Đăng ký */
+.auth-form {
+    max-width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.auth-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Hiệu ứng hover cho thẻ Công việc (Card) ở trang chủ */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+}
+
+.card-footer {
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Tùy chỉnh Footer */
+.site-footer {
+    background-color: #212529; /* Cùng màu với navbar dark */
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+    margin-top: auto; /* Thuộc tính quan trọng đi kèm flexbox để đẩy xuống đáy */
+}
+
+.site-footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Thêm CSS cho banner chào mừng lớn */
+.bg-primary {
+    background-color: #0d6efd !important; /* Màu xanh Bootstrap mặc định */
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.p-5 {
+    padding: 3rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
