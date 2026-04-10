@@ -1,31 +1,92 @@
 <%- include('../partials/header') %>
 
-<div class="container">
-    <div class="auth-form">
-        <h2>Đăng Ký</h2>
-        
-        <% if (error) { %>
-            <div class="alert alert-danger text-center"><%= error %></div>
-        <% } %>
-        
-        <form action="/users/register" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Tên đăng nhập: <span class="text-danger">*</span></label>
-                <input type="text" name="username" class="form-control" required placeholder="Nhập tên đăng nhập">
-            </div>
-            
-            <div class="mb-4">
-                <label class="form-label">Mật khẩu: <span class="text-danger">*</span></label>
-                <input type="password" name="password" class="form-control" required placeholder="Nhập mật khẩu">
-            </div>
-            
-            <button type="submit" class="btn btn-success w-100">Đăng Ký</button>
-        </form>
-        
-        <div class="text-center mt-3">
-            Đã có tài khoản? <a href="/users/login" class="text-decoration-none">Đăng nhập ngay</a>
+<div class="d-flex align-items-center justify-content-center vh-100"
+     style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+
+    <div class="card border-0 shadow-lg rounded-4 p-4" style="width: 100%; max-width: 400px;">
+
+        <!-- TITLE -->
+        <div class="text-center mb-4">
+            <h3 class="fw-bold">📝 Đăng ký</h3>
+            <p class="text-muted mb-0">Tạo tài khoản để bắt đầu quản lý công việc</p>
         </div>
+
+        <!-- ERROR -->
+        <% if (error) { %>
+            <div class="alert alert-danger rounded-3 text-center">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- FORM -->
+        <form action="/users/register" method="POST">
+
+            <!-- USERNAME -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Tên đăng nhập <span class="text-danger">*</span>
+                </label>
+                <input type="text" name="username"
+                       class="form-control rounded-pill px-3"
+                       placeholder="Nhập username..."
+                       required>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Mật khẩu <span class="text-danger">*</span>
+                </label>
+                <input type="password" name="password"
+                       class="form-control rounded-pill px-3"
+                       placeholder="Nhập mật khẩu..."
+                       required>
+            </div>
+
+            <!-- CONFIRM PASSWORD (optional xịn hơn) -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Nhập lại mật khẩu
+                </label>
+                <input type="password" name="confirmPassword"
+                       class="form-control rounded-pill px-3"
+                       placeholder="Xác nhận mật khẩu...">
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit"
+                    class="btn btn-success w-100 rounded-pill shadow-sm">
+                🎉 Tạo tài khoản
+            </button>
+        </form>
+
+        <!-- LOGIN -->
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Đã có tài khoản?
+                <a href="/users/login" class="fw-semibold text-decoration-none">
+                    Đăng nhập ngay
+                </a>
+            </small>
+        </div>
+
     </div>
 </div>
+
+<!-- CSS -->
+<style>
+input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(25,135,84,.25);
+    border-color: #75b798;
+}
+
+.card {
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+</style>
 
 <%- include('../partials/footer') %>

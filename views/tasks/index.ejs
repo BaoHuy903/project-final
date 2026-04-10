@@ -4,92 +4,146 @@
     let progressPercent = totalTasksCount === 0 ? 0 : Math.round((completedTasksCount / totalTasksCount) * 100);
 %>
 
-<div class="p-5 bg-primary text-white text-center mb-4">
-    <h1 class="display-5 fw-bold">Chào mừng bạn đến với Task Manager</h1>
-    <p class="lead">Nâng cao năng suất, quản lý công việc hiệu quả và dễ dàng hơn.</p>
+<!-- HERO -->
+<div class="p-5 text-center mb-5 shadow-sm" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white;">
+    <h1 class="fw-bold">Task Manager</h1>
+    <p class="mb-0">Quản lý công việc thông minh – nâng cao năng suất mỗi ngày</p>
 </div>
 
 <div class="container mb-5">
-    
+
+    <!-- PROGRESS -->
     <% if (totalTasksCount > 0) { %>
-        <div class="card shadow-sm mb-4 border-0 bg-light">
+        <div class="card border-0 shadow-sm mb-4 rounded-4">
             <div class="card-body">
-                <h6 class="fw-bold mb-2">Tiến độ tổng thể: <%= progressPercent %>% (<%= completedTasksCount %>/<%= totalTasksCount %> công việc)</h6>
-                <div class="progress" style="height: 20px;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: <%= progressPercent %>%" aria-valuenow="<%= progressPercent %>" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="fw-semibold">Tiến độ tổng thể</span>
+                    <span class="fw-bold text-success"><%= progressPercent %>%</span>
                 </div>
+
+                <div class="progress rounded-pill" style="height: 12px;">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                        style="width: <%= progressPercent %>%">
+                    </div>
+                </div>
+
+                <small class="text-muted">
+                    <%= completedTasksCount %>/<%= totalTasksCount %> công việc hoàn thành
+                </small>
             </div>
         </div>
     <% } %>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Danh sách công việc</h2>
-        <a href="/new" class="btn btn-success fw-bold">+ Thêm công việc</a>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">📋 Danh sách công việc</h3>
+        <a href="/new" class="btn btn-success rounded-pill px-4 shadow-sm">
+            + Thêm
+        </a>
     </div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body bg-light">
-            <form action="/" method="GET" class="row g-2 align-items-center">
+    <!-- FILTER -->
+    <div class="card border-0 shadow-sm mb-4 rounded-4">
+        <div class="card-body">
+            <form action="/" method="GET" class="row g-2">
                 <div class="col-md-5">
-                    <input type="text" name="search" class="form-control" placeholder="Tìm tên công việc..." value="<%= search %>">
+                    <input type="text" name="search" class="form-control rounded-pill px-3"
+                        placeholder="🔍 Tìm công việc..." value="<%= search %>">
                 </div>
+
                 <div class="col-md-4">
-                    <select name="status" class="form-select">
-                        <option value="Tất cả" <%= currentStatus === 'Tất cả' ? 'selected' : '' %>>Tất cả trạng thái</option>
+                    <select name="status" class="form-select rounded-pill">
+                        <option value="Tất cả" <%= currentStatus === 'Tất cả' ? 'selected' : '' %>>Tất cả</option>
                         <option value="Chưa làm" <%= currentStatus === 'Chưa làm' ? 'selected' : '' %>>Chưa làm</option>
                         <option value="Đang làm" <%= currentStatus === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
                         <option value="Hoàn thành" <%= currentStatus === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
                     </select>
                 </div>
+
                 <div class="col-md-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary w-100">Lọc / Tìm</button>
-                    <a href="/" class="btn btn-outline-secondary">Xóa lọc</a>
+                    <button class="btn btn-primary w-100 rounded-pill">Lọc</button>
+                    <a href="/" class="btn btn-outline-secondary rounded-pill">Reset</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="row">
+    <!-- TASK LIST -->
+    <div class="row g-4">
         <% if (tasks.length === 0) { %>
-            <div class="col-12"><div class="alert alert-info">Không tìm thấy công việc nào!</div></div>
+            <div class="col-12">
+                <div class="alert alert-info text-center rounded-4">
+                    😢 Không có công việc nào
+                </div>
+            </div>
         <% } else { %>
+
             <% tasks.forEach(task => { %>
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm h-100 border-<%= task.status === 'Hoàn thành' ? 'success' : 'light' %>">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 rounded-4 task-card">
+
                         <div class="card-body">
-                            <h5 class="card-title fw-bold"><%= task.title %></h5>
-                            <p class="card-text text-muted mb-2"><%= task.description || 'Không có mô tả' %></p>
-                            
+
+                            <h5 class="fw-bold mb-2"><%= task.title %></h5>
+
+                            <p class="text-muted small mb-3">
+                                <%= task.description || 'Không có mô tả' %>
+                            </p>
+
                             <% if (task.dueDate) { %>
                                 <% 
                                     const today = new Date();
                                     const isOverdue = new Date(task.dueDate) < today && task.status !== 'Hoàn thành';
                                 %>
-                                <p class="mb-2" style="font-size: 0.9rem;">
-                                    <span class="fw-bold">Hạn chót:</span> 
+                                <p class="small mb-2">
+                                    ⏰ 
                                     <span class="<%= isOverdue ? 'text-danger fw-bold' : 'text-primary' %>">
                                         <%= new Date(task.dueDate).toLocaleDateString('vi-VN') %>
-                                        <%= isOverdue ? '(Đã quá hạn)' : '' %>
+                                        <%= isOverdue ? ' (Quá hạn)' : '' %>
                                     </span>
                                 </p>
                             <% } %>
 
-                            <span class="badge bg-<%= task.status === 'Hoàn thành' ? 'success' : (task.status === 'Đang làm' ? 'warning text-dark' : 'secondary') %>">
+                            <!-- STATUS -->
+                            <span class="badge px-3 py-2 rounded-pill
+                                <%= task.status === 'Hoàn thành' ? 'bg-success' : 
+                                    task.status === 'Đang làm' ? 'bg-warning text-dark' : 
+                                    'bg-secondary' %>">
                                 <%= task.status %>
                             </span>
                         </div>
-                        <div class="card-footer bg-white d-flex justify-content-between">
-                            <a href="/edit/<%= task._id %>" class="btn btn-sm btn-primary px-3">Sửa</a>
-                            <form action="/delete/<%= task._id %>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                <button type="submit" class="btn btn-sm btn-danger px-3">Xóa</button>
+
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            <a href="/edit/<%= task._id %>" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                ✏️ Sửa
+                            </a>
+
+                            <form action="/delete/<%= task._id %>" method="POST"
+                                onsubmit="return confirm('Xóa task này?');">
+                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                    🗑 Xóa
+                                </button>
                             </form>
                         </div>
+
                     </div>
                 </div>
             <% }) %>
+
         <% } %>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- CUSTOM CSS -->
+<style>
+.task-card {
+    transition: all 0.25s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+</style>
+
 <%- include('../partials/footer') %>
