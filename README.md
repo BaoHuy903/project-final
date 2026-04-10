@@ -1,53 +1,42 @@
-# 📝 Task Management System
+# Task Management System
 
-## 📌 Giới thiệu
-Hệ thống quản lý công việc (Task Management System) được xây dựng nhằm hỗ trợ người dùng quản lý, theo dõi và tối ưu hóa tiến độ công việc cá nhân một cách hiệu quả.
-
----
-
-## 🔐 Chức năng 1: Quản lý người dùng
-**Người thực hiện: Hồ Thăng Bảo Huy**
-
-* Đăng ký tài khoản cho người dùng mới
-* Đăng nhập hệ thống
-* Mã hóa mật khẩu bằng **bcrypt**
-* Sử dụng **session** để duy trì trạng thái
-* Middleware kiểm tra xác thực
-* Đăng xuất khỏi hệ thống
+## Gioi thieu
+He thong quan ly cong viec giup nguoi dung theo doi tien do hieu qua.
 
 ---
 
-## 📋 Chức năng 2: Quản lý công việc
-**Người thực hiện: Nguyễn Bá Toàn**
+## Chuc nang 1: Quan ly nguoi dung
+**Nguoi thuc hien: Ho Thang Bao Huy**
 
-* Xây dựng model **Task** và liên kết với **User**
-* Thêm công việc mới (Create)
-* Chỉnh sửa công việc (Update)
-* Xóa công việc (Delete)
-* Hiển thị danh sách công việc (Read)
-* Giao diện form nhập liệu
+* Dang ky, Dang nhap
+* Ma hoa mat khau bcrypt
+* Su dung session
 
 ---
 
-## 🔍 Chức năng 3: Tìm kiếm & Giao diện
-**Người thực hiện: Trần Tiến Minh**
+## Chuc nang 2: Quan ly cong viec
+**Nguoi thuc hien: Nguyen Ba Toan**
 
-* Tìm kiếm công việc theo tên
-* Lọc công việc theo trạng thái
-* Thống kê tiến độ bằng **progress bar (%)**
-* Thiết kế giao diện bằng **Bootstrap**
-
----
-
-## 🚀 Công nghệ sử dụng
-* Node.js, Express.js
-* MongoDB + Mongoose
-* EJS Template Engine
-* Bootstrap 5
+* Model Task & User
+* CRUD (Create, Read, Update, Delete)
+* Giao dien form
 
 ---
 
-## 📦 Cài đặt
+## Chuc nang 3: Thong ke & Giao dien
+**Nguoi thuc hien: Tran Tien Minh**
+
+* Tim kiem & Loc cong viec
+* Progress bar & Bootstrap UI
+
+---
+
+## Cong nghe
+* Node.js, Express, MongoDB, EJS
+
+---
+
+## Cai dat
 ```bash
 npm install
 npm start
