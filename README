@@ -1,8 +1,29 @@
-#1
-create data task_manager
+#Chức năng 1: Quản lý người dùng (Authentication & Session)#
+NGƯỜI THỰC HIỆN: HỒ THĂNG BẢO HUY
+- Xây dựng chức năng đăng ký tài khoản
+- Xây dựng chức năng đăng nhập
+- Mã hóa mật khẩu bằng bcrypt để bảo mật
+- Cấu hình session để lưu trạng thái đăng nhập
+- Xây dựng middleware kiểm tra đăng nhập
+- Xây dựng chức năng đăng xuất
 
-#2
-npm install express mongoose ejs dotenv express-session bcryptjs
 
-#3
-node app.js
+#Chức năng 2: Quản lý công việc (Task Management - CRUD)#
+NGƯỜI THỰC HIỆN: NGUYỄN BÁ TOÀN
+- Xây dựng model Task và liên kết với User
+- Xây dựng chức năng thêm công việc
+- Xây dựng chức năng chỉnh sửa công việc
+- Xây dựng chức năng xóa công việc
+- Hiển thị danh sách công việc theo từng người dùng
+- Thiết kế giao diện form nhập liệu (thêm/sửa)
+
+
+#Chức năng 3: Tìm kiếm, Thống kê & Giao diện (Search + UI + Analytics)#
+NGƯỜI THỰC HIỆN: TRẦN TIẾN MINH
+- Xây dựng chức năng tìm kiếm công việc theo tên
+- Xây dựng chức năng lọc theo trạng thái
+- Tính toán thống kê (tổng số task, số task hoàn thành)
+- Hiển thị progress bar (%)
+- Xây dựng hệ thống flash message (thông báo)
+- Thiết kế giao diện (Bootstrap, navbar, layout)
+- Tinh chỉnh UI/UX hoàn chỉnh hệ thống
