@@ -1,29 +1,92 @@
-#Chức năng 1: Quản lý người dùng (Authentication & Session)#
-NGƯỜI THỰC HIỆN: HỒ THĂNG BẢO HUY
-- Xây dựng chức năng đăng ký tài khoản
-- Xây dựng chức năng đăng nhập
-- Mã hóa mật khẩu bằng bcrypt để bảo mật
-- Cấu hình session để lưu trạng thái đăng nhập
-- Xây dựng middleware kiểm tra đăng nhập
-- Xây dựng chức năng đăng xuất
+# 📝 Task Management System
 
+## 📌 Giới thiệu
 
-#Chức năng 2: Quản lý công việc (Task Management - CRUD)#
-NGƯỜI THỰC HIỆN: NGUYỄN BÁ TOÀN
-- Xây dựng model Task và liên kết với User
-- Xây dựng chức năng thêm công việc
-- Xây dựng chức năng chỉnh sửa công việc
-- Xây dựng chức năng xóa công việc
-- Hiển thị danh sách công việc theo từng người dùng
-- Thiết kế giao diện form nhập liệu (thêm/sửa)
+Hệ thống quản lý công việc (Task Management System) được xây dựng nhằm hỗ trợ người dùng quản lý, theo dõi và tối ưu hóa tiến độ công việc cá nhân một cách hiệu quả. Ứng dụng cung cấp các chức năng từ xác thực người dùng đến quản lý công việc, tìm kiếm và thống kê.
 
+---
 
-#Chức năng 3: Tìm kiếm, Thống kê & Giao diện (Search + UI + Analytics)#
-NGƯỜI THỰC HIỆN: TRẦN TIẾN MINH
-- Xây dựng chức năng tìm kiếm công việc theo tên
-- Xây dựng chức năng lọc theo trạng thái
-- Tính toán thống kê (tổng số task, số task hoàn thành)
-- Hiển thị progress bar (%)
-- Xây dựng hệ thống flash message (thông báo)
-- Thiết kế giao diện (Bootstrap, navbar, layout)
-- Tinh chỉnh UI/UX hoàn chỉnh hệ thống
+## 🔐 Chức năng 1: Quản lý người dùng (Authentication & Session)
+
+**Người thực hiện: Hồ Thăng Bảo Huy**
+
+* Đăng ký tài khoản cho người dùng mới
+* Đăng nhập hệ thống
+* Mã hóa mật khẩu bằng **bcrypt** để đảm bảo bảo mật
+* Sử dụng **session** để duy trì trạng thái đăng nhập
+* Middleware kiểm tra xác thực người dùng
+* Đăng xuất khỏi hệ thống
+
+---
+
+## 📋 Chức năng 2: Quản lý công việc (Task Management – CRUD)
+
+**Người thực hiện: Nguyễn Bá Toàn**
+
+* Xây dựng model **Task** và liên kết với **User**
+* Thêm công việc mới (Create)
+* Chỉnh sửa công việc (Update)
+* Xóa công việc (Delete)
+* Hiển thị danh sách công việc theo từng người dùng (Read)
+* Giao diện form nhập liệu (thêm/sửa)
+
+---
+
+## 🔍 Chức năng 3: Tìm kiếm, Thống kê & Giao diện (Search + UI + Analytics)
+
+**Người thực hiện: Trần Tiến Minh**
+
+* Tìm kiếm công việc theo tên
+* Lọc công việc theo trạng thái
+* Thống kê:
+
+  * Tổng số công việc
+  * Số công việc đã hoàn thành
+* Hiển thị tiến độ bằng **progress bar (%)**
+* Flash message (thông báo hệ thống)
+* Thiết kế giao diện bằng **Bootstrap** (navbar, layout, responsive)
+* Tối ưu UI/UX
+
+---
+
+## 🚀 Công nghệ sử dụng
+
+* Node.js
+* Express.js
+* MongoDB + Mongoose
+* EJS Template Engine
+* Bootstrap 5
+
+---
+
+## 📦 Cài đặt & chạy dự án
+
+```bash
+# Clone project
+git clone <repo-url>
+
+# Cài dependencies
+npm install
+
+# Chạy project
+npm start
+```
+
+---
+
+## 📊 Tính năng nổi bật
+
+* Hệ thống xác thực an toàn
+* Quản lý công việc đầy đủ CRUD
+* Giao diện thân thiện, dễ sử dụng
+* Có thống kê và theo dõi tiến độ
+
+---
+
+## 👥 Thành viên thực hiện
+
+* Hồ Thăng Bảo Huy – Authentication & Session
+* Nguyễn Bá Toàn – Task Management
+* Trần Tiến Minh – Search, UI & Analytics
+
+---
