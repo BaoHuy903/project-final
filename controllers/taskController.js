@@ -24,10 +24,11 @@ exports.getNewTaskForm = (req, res) => {
 // [POST] Xử lý thêm công việc
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, status } = req.body;
+        const { title, description, date, status } = req.body;
         const newTask = new Task({
             title,
             description,
+            date,
             status,
             user: req.session.userId 
         });
@@ -57,10 +58,10 @@ exports.getEditTaskForm = async (req, res) => {
 // [POST] Xử lý cập nhật công việc
 exports.updateTask = async (req, res) => {
     try {
-        const { title, description, status } = req.body;
+        const { title, description, date, status } = req.body;
         await Task.findOneAndUpdate(
             { _id: req.params.id, user: req.session.userId }, 
-            { title, description, status }
+            { title, description, date, status }
         );
         res.redirect('/');
     } catch (error) {

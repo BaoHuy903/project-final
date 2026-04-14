@@ -12,9 +12,13 @@
             <textarea name="description" class="form-control" rows="3"><%= task.description %></textarea>
         </div>
         <div class="mb-3">
+            <label class="form-label">Ngày <span class="text-danger">*</span></label>
+            <input type="date" name="date" class="form-control" value="<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>" required>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Trạng thái</label>
             <select name="status" class="form-select">
-                <option value="Chưa làm" <%= task.status === 'Chưa làm' ? 'selected' : '' %>>Chưa làm</option>
+                <option value="Cần làm" <%= task.status === 'Cần làm' ? 'selected' : '' %>>Cần làm</option>
                 <option value="Đang làm" <%= task.status === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
                 <option value="Hoàn thành" <%= task.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
             </select>

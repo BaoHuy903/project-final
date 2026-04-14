@@ -31,24 +31,29 @@ app.use(session({
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 } // Cookie sống 1 ngày
 }));
 
+// Hàm helper để xác định màu theo trạng thái
+app.use((req, res, next) => {
+    res.locals.getColorByStatus = (status) => {
+        const colors = {
+            'Cần làm': '#c0392b',
+            'Đang làm': '#f39c12',
+            'Hoàn thành': '#27ae60'
+        };
+        return colors[status] || '#9aa0a6';
+    };
+    next();
+});
+
 // Gắn Routes
 app.use('/users', userRoutes);
-app.use('/', taskRoutes);
-
-// Route Trang chủ tạm thời để test đăng nhập/đăng xuất
-app.get('/', (req, res) => {
-    // Nếu chưa có session userId -> chưa đăng nhập -> đuổi về trang login
+app.use('/', (req, res, next) => {
+    // Check auth middleware
     if (!req.session.userId) {
         return res.redirect('/users/login');
     }
-    
-    // Nếu đã đăng nhập thành công
-    res.send(`
-        <h1>Chào mừng, ${req.session.username}!</h1>
-        <p>Bạn đã đăng nhập thành công vào hệ thống quản lý công việc.</p>
-        <a href="/users/logout"><button>Đăng Xuất</button></a>
-    `);
+    next();
 });
+app.use('/', taskRoutes);
 
 // Khởi chạy server
 const PORT = process.env.PORT || 3000;

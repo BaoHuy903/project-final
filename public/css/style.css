@@ -1,10 +1,14 @@
-/* Tùy chỉnh chung để Footer luôn ở dưới đáy trang */
+/* ===== Google Calendar Style ===== */
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
-    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn trang */
+    background-color: #ffffff;
 }
 
 /* Đẩy nội dung chính giãn ra để ép footer xuống */
@@ -12,73 +16,259 @@ html, body {
     flex: 1;
 }
 
-/* Tùy chỉnh form Đăng nhập / Đăng ký */
-.auth-form {
-    max-width: 400px;
-    margin: 50px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* ===== Calendar Layout ===== */
+.calendar-container {
+    display: flex;
+    height: calc(100% - 60px);
+    background-color: #fff;
 }
 
-.auth-form h2 {
-    text-align: center;
+.calendar-sidebar {
+    width: 300px;
+    background-color: #fff;
+    border-right: 1px solid #e8eaed;
+    padding: 20px;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.calendar-main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fafbfc;
+}
+
+/* Mini Calendar */
+#mini-calendar {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 12px;
     margin-bottom: 20px;
-    font-weight: bold;
-    color: #333;
+    border: 1px solid #e8eaed;
 }
 
-/* Hiệu ứng hover cho thẻ Công việc (Card) ở trang chủ */
-.card {
-    border: none;
-    border-radius: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Task List */
+.task-list {
+    background-color: #fafbfc;
+    border-radius: 8px;
+    padding: 12px;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    margin-bottom: 8px;
 }
 
-.card-footer {
-    border-top: 1px solid #f0f0f0;
+.task-item:hover {
+    background-color: #f1f3f4;
 }
 
-/* Tùy chỉnh Footer */
+.task-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #202124;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-date {
+    font-size: 12px;
+    color: #9aa0a6;
+    margin-top: 2px;
+}
+
+/* FullCalendar Customization */
+.fc {
+    font-family: 'Roboto', sans-serif;
+}
+
+.fc .fc-button-primary {
+    background-color: #4285f4 !important;
+    border-color: #4285f4 !important;
+    border-radius: 6px !important;
+    text-transform: none !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 6px 16px !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+.fc .fc-button-primary.fc-button-active {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+.fc-header-toolbar {
+    padding: 16px 0;
+    margin-bottom: 16px;
+}
+
+.fc-toolbar-title {
+    font-size: 24px !important;
+    font-weight: 400 !important;
+    color: #202124;
+}
+
+.fc-col-header-cell {
+    background-color: #fafbfc;
+    border-color: #dadce0 !important;
+    color: #5f6368;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 12px 0 !important;
+}
+
+.fc-daygrid-day {
+    background-color: #fff;
+    border-color: #e8eaed !important;
+}
+
+.fc-daygrid-day:hover {
+    background-color: #f8f9fa;
+}
+
+.fc-daygrid-day-number {
+    padding: 8px 6px;
+    color: #202124;
+    font-size: 13px;
+}
+
+.fc-daygrid-day.fc-day-other {
+    background-color: #fafbfc;
+}
+
+.fc-daygrid-day.fc-day-today {
+    background-color: #e8f0fe;
+}
+
+.fc-daygrid-day-frame {
+    min-height: 100px;
+}
+
+.fc-event {
+    background-color: #5b9cf5 !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    margin: 4px 2px !important;
+}
+
+.fc-event-title {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0 4px;
+    white-space: normal;
+}
+
+/* Modal Styling */
+.modal-content {
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #fff;
+}
+
+.modal-body {
+    background-color: #fff;
+}
+
+.modal-footer {
+    background-color: #fff;
+}
+
+.form-control {
+    border: 1px solid #dadce0 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+}
+
+.form-control:focus {
+    border-color: #4285f4 !important;
+    box-shadow: 0 1px 3px 0 rgba(66, 133, 244, 0.3) !important;
+}
+
+.form-label {
+    font-size: 13px;
+    color: #5f6368;
+    font-weight: 500;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #4285f4 !important;
+    border-color: #4285f4 !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+}
+
+.btn-primary:hover {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+/* Badge Styles */
+.badge {
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dadce0;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bdc1c6;
+}
+
+/* Footer */
 .site-footer {
-    background-color: #212529; /* Cùng màu với navbar dark */
-    color: #fff;
+    background-color: #fff;
+    color: #5f6368;
     text-align: center;
     padding: 15px 0;
     width: 100%;
-    margin-top: auto; /* Thuộc tính quan trọng đi kèm flexbox để đẩy xuống đáy */
-}
-
-.site-footer p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-/* Thêm CSS cho banner chào mừng lớn */
-.bg-primary {
-    background-color: #0d6efd !important; /* Màu xanh Bootstrap mặc định */
-}
-
-.text-white {
-    color: #fff !important;
-}
-
-.p-5 {
-    padding: 3rem !important;
-}
-
-.mb-5 {
-    margin-bottom: 3rem !important;
-}
-
-.lead {
-    font-size: 1.25rem;
-    font-weight: 300;
+    margin-top: auto;
+    border-top: 1px solid #dadce0;
 }
