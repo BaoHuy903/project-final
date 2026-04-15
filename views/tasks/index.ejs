@@ -1,45 +1,136 @@
 <%- include('../partials/header') %>
 
-<div class="p-5 bg-primary text-white text-center mb-5">
-    <h1 class="display-5 fw-bold">Chào mừng bạn đến với Task Manager</h1>
-    <p class="lead">Nâng cao năng suất, quản lý công việc hiệu quả và dễ dàng hơn.</p>
-</div>
+<div class="calendar-container">
+    <!-- Sidebar -->
+    <div class="calendar-sidebar">
+        <button class="btn btn-primary w-100 mb-4" onclick="openNewTaskModal()" style="background-color: #4285f4; border: none; border-radius: 24px; font-weight: 500; padding: 10px 24px;">
+            <span style="margin-right: 8px;">+</span> Tạo công việc
+        </button>
 
-<div class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Danh sách công việc của bạn</h2>
-        <div>
-            <a href="/new" class="btn btn-success">+ Thêm công việc</a>
+        <!-- Mini Calendar -->
+        <div id="mini-calendar" style="margin-bottom: 20px;"></div>
+
+        <!-- Task List -->
+        <div class="task-list">
+            <h5 style="color: #5f6368; font-size: 14px; font-weight: 500; margin-bottom: 12px;">Công việc sắp tới</h5>
+            <% if (tasks && tasks.length > 0) { %>
+                <% tasks.slice(0, 5).forEach(task => { %>
+                    <div class="task-item" onclick="goToDate('<%= task.date %>')">
+                        <div class="task-dot" data-color="<%= getColorByStatus(task.status) %>"></div>
+                        <div class="task-info">
+                            <div class="task-title"><%= task.title %></div>
+                            <div class="task-date"><%= new Date(task.date).toLocaleDateString('vi-VN') %></div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p style="color: #9aa0a6; font-size: 13px;">Không có công việc</p>
+            <% } %>
         </div>
     </div>
 
-    <div class="row">
-        <% if (tasks.length === 0) { %>
-            <div class="col-12">
-                <div class="alert alert-info">Bạn chưa có công việc nào. Hãy thêm mới nhé!</div>
-            </div>
-        <% } else { %>
-            <% tasks.forEach(task => { %>
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= task.title %></h5>
-                            <p class="card-text text-muted"><%= task.description || 'Không có mô tả' %></p>
-                            <span class="badge bg-<%= task.status === 'Hoàn thành' ? 'success' : (task.status === 'Đang làm' ? 'warning text-dark' : 'secondary') %>">
-                                <%= task.status %>
-                            </span>
-                        </div>
-                        <div class="card-footer bg-white d-flex justify-content-between">
-                            <a href="/edit/<%= task._id %>" class="btn btn-sm btn-primary">Sửa</a>
-                            <form action="/delete/<%= task._id %>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            <% }) %>
-        <% } %>
+    <!-- Main Calendar -->
+    <div class="calendar-main">
+        <div id="calendar"></div>
     </div>
 </div>
+
+<!-- New Task Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Thêm công việc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/new" method="POST" id="taskForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Tiêu đề công việc</label>
+                        <input type="text" class="form-control" name="title" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Mô tả</label>
+                        <textarea class="form-control" name="description" rows="3" style="border-radius: 8px; border: 1px solid #dadce0;"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Ngày</label>
+                        <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Trạng thái</label>
+                        <select class="form-control" name="status" style="border-radius: 8px; border: 1px solid #dadce0;">
+                            <option value="Cần làm">Cần làm</option>
+                            <option value="Đang làm">Đang làm</option>
+                            <option value="Hoàn thành">Hoàn thành</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #4285f4; border: none;">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Task Detail Modal -->
+<div class="modal fade" id="taskDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Chi tiết công việc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="taskDetailContent">
+                <!-- Content loaded by JavaScript -->
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="editTaskBtn" style="background-color: #4285f4; border: none;">Sửa</button>
+                <button type="button" class="btn btn-danger" id="deleteTaskBtn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+<!-- Task Data for Calendar -->
+<script>
+    // eslint-disable-next-line
+    const tasksData = [
+        <% if (tasks && tasks.length > 0) { %>
+            <% tasks.forEach((task, index) => { %>
+                {
+                    id: "<%= task._id %>",
+                    title: "<%= task.title %>",
+                    date: "<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>",
+                    description: "<%= task.description %>",
+                    status: "<%= task.status %>",
+                    color: "<%= getColorByStatus(task.status) %>"
+                }<%= index < tasks.length - 1 ? ',' : '' %>
+            <% }) %>
+        <% } %>
+    ];
+    
+    // eslint-disable-next-line
+    window.tasksData = tasksData.map(task => ({
+        id: task.id,
+        title: task.title,
+        date: task.date,
+        backgroundColor: task.color,
+        borderColor: task.color,
+        extendedProps: {
+            description: task.description,
+            status: task.status
+        }
+    }));
+</script>
+
+<!-- Calendar JS -->
+<script src="/js/calendar.js"></script>
 
 <%- include('../partials/footer') %>

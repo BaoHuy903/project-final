@@ -1,31 +1,67 @@
 <%- include('../partials/header') %>
 
-<div class="container">
-    <div class="auth-form">
-        <h2>Đăng Ký</h2>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 420px; border-radius: 15px;">
         
-        <% if (error) { %>
-            <div class="alert alert-danger text-center"><%= error %></div>
-        <% } %>
-        
-        <form action="/users/register" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Tên đăng nhập: <span class="text-danger">*</span></label>
-                <input type="text" name="username" class="form-control" required placeholder="Nhập tên đăng nhập">
-            </div>
+        <!-- Header -->
+        <div class="card-header text-center bg-success text-white" style="border-radius: 15px 15px 0 0;">
+            <h4 class="mb-0">Đăng Ký</h4>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
             
-            <div class="mb-4">
-                <label class="form-label">Mật khẩu: <span class="text-danger">*</span></label>
-                <input type="password" name="password" class="form-control" required placeholder="Nhập mật khẩu">
-            </div>
+            <% if (error) { %>
+                <div class="alert alert-danger text-center py-2">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/users/register" method="POST">
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Tên đăng nhập <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        name="username" 
+                        class="form-control rounded-pill px-3" 
+                        placeholder="Nhập username..."
+                        required
+                    >
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Mật khẩu <span class="text-danger">*</span>
+                    </label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        class="form-control rounded-pill px-3" 
+                        placeholder="Nhập mật khẩu..."
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-semibold">
+                    Đăng Ký
+                </button>
+            </form>
             
-            <button type="submit" class="btn btn-success w-100">Đăng Ký</button>
-        </form>
-        
-        <div class="text-center mt-3">
-            Đã có tài khoản? <a href="/users/login" class="text-decoration-none">Đăng nhập ngay</a>
+            <div class="text-center mt-3">
+                <small>
+                    Đã có tài khoản? 
+                    <a href="/users/login" class="fw-semibold text-decoration-none">
+                        Đăng nhập ngay
+                    </a>
+                </small>
+            </div>
         </div>
     </div>
+
 </div>
 
 <%- include('../partials/footer') %>
