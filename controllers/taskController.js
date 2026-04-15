@@ -30,8 +30,9 @@ exports.createTask = async (req, res) => {
             description,
             date,
             status,
-            user: req.session.userId 
-        });
+            user: req.session.userId,
+            attachment: req.file ? '/uploads/' + req.file.filename : null
+});
         await newTask.save();
         res.redirect('/');
     } catch (error) {

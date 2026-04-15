@@ -43,7 +43,7 @@
                 <h5 class="modal-title fw-bold">Thêm công việc</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="/new" method="POST" id="taskForm">
+            <form action="/new" method="POST" enctype="multipart/form-data" id="taskForm">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-500">Tiêu đề công việc</label>
@@ -64,6 +64,10 @@
                             <option value="Đang làm">Đang làm</option>
                             <option value="Hoàn thành">Hoàn thành</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Đính kèm</label>
+                        <input type="file" name="attachment" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
