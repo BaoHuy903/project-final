@@ -1,16 +1,13 @@
 <%- include('../partials/header') %>
 
 <div class="calendar-container">
-    <!-- Sidebar -->
     <div class="calendar-sidebar">
         <button class="btn btn-primary w-100 mb-4" onclick="openNewTaskModal()" style="background-color: #4285f4; border: none; border-radius: 24px; font-weight: 500; padding: 10px 24px;">
             <span style="margin-right: 8px;">+</span> Tạo công việc
         </button>
 
-        <!-- Mini Calendar -->
         <div id="mini-calendar" style="margin-bottom: 20px;"></div>
 
-        <!-- Task List -->
         <div class="task-list">
             <h5 style="color: #5f6368; font-size: 14px; font-weight: 500; margin-bottom: 12px;">Công việc sắp tới</h5>
             <% if (tasks && tasks.length > 0) { %>
@@ -19,7 +16,7 @@
                         <div class="task-dot" data-color="<%= getColorByStatus(task.status) %>"></div>
                         <div class="task-info">
                             <div class="task-title"><%= task.title %></div>
-                            <div class="task-date"><%= new Date(task.date).toLocaleDateString('vi-VN') %></div>
+                            <div class="task-date"><%= new Date(task.date).toLocaleDateString('vi-VN') %> - <%= task.time %></div>
                         </div>
                     </div>
                 <% }) %>
@@ -29,13 +26,11 @@
         </div>
     </div>
 
-    <!-- Main Calendar -->
     <div class="calendar-main">
         <div id="calendar"></div>
     </div>
 </div>
 
-<!-- New Task Modal -->
 <div class="modal fade" id="taskModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -53,15 +48,19 @@
                         <label class="form-label fw-500">Mô tả</label>
                         <textarea class="form-control" name="description" rows="3" style="border-radius: 8px; border: 1px solid #dadce0;"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-500">Ngày</label>
-                        <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
-                    </div>
+                    
                     <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Ngày</label>
+                            <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-500">Giờ bắt đầu</label>
                             <input type="time" class="form-control" name="time" required style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-500">Thông báo trước</label>
                             <select class="form-control" name="reminder" style="border-radius: 8px; border: 1px solid #dadce0;">
@@ -71,15 +70,16 @@
                                 <option value="30">30 phút</option>
                             </select>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Trạng thái</label>
+                            <select class="form-control" name="status" style="border-radius: 8px; border: 1px solid #dadce0;">
+                                <option value="Cần làm">Cần làm</option>
+                                <option value="Đang làm">Đang làm</option>
+                                <option value="Hoàn thành">Hoàn thành</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-500">Trạng thái</label>
-                        <select class="form-control" name="status" style="border-radius: 8px; border: 1px solid #dadce0;">
-                            <option value="Cần làm">Cần làm</option>
-                            <option value="Đang làm">Đang làm</option>
-                            <option value="Hoàn thành">Hoàn thành</option>
-                        </select>
-                    </div>
+
                     <div class="mb-3">
                         <label class="form-label fw-500">Đính kèm</label>
                         <input type="file" name="attachment" class="form-control">
@@ -94,7 +94,6 @@
     </div>
 </div>
 
-<!-- Task Detail Modal -->
 <div class="modal fade" id="taskDetailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -103,8 +102,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="taskDetailContent">
-                <!-- Content loaded by JavaScript -->
-            </div>
+                </div>
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary" id="editTaskBtn" style="background-color: #4285f4; border: none;">Sửa</button>
@@ -114,10 +112,8 @@
     </div>
 </div>
 
-<!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
-<!-- Task Data for Calendar -->
 <script>
     // eslint-disable-next-line
     const tasksData = [
@@ -127,8 +123,8 @@
                     id: "<%= task._id %>",
                     title: "<%= task.title %>",
                     date: "<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>",
-                    time: "<%= task.time %>", // Thêm dòng này
-                    reminder: <%= task.reminder || 0 %>, // Thêm dòng này
+                    time: "<%= task.time || '00:00' %>",
+                    reminder: <%= task.reminder || 0 %>,
                     description: "<%= task.description %>",
                     status: "<%= task.status %>",
                     color: "<%= getColorByStatus(task.status) %>"
@@ -146,12 +142,13 @@
         borderColor: task.color,
         extendedProps: {
             description: task.description,
-            status: task.status
+            status: task.status,
+            time: task.time,
+            reminder: task.reminder
         }
     }));
 </script>
 
-<!-- Calendar JS -->
 <script src="/js/calendar.js"></script>
 
 <%- include('../partials/footer') %>

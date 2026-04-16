@@ -4,7 +4,6 @@ const Task = require('../models/task');
 exports.getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({ user: req.session.userId }).sort({ createdAt: -1 });
-        // Trỏ vào thư mục tasks/index
         res.render('tasks/index', { 
             tasks, 
             username: req.session.username 
@@ -17,20 +16,20 @@ exports.getAllTasks = async (req, res) => {
 
 // [GET] Form thêm công việc mới
 exports.getNewTaskForm = (req, res) => {
-    // Trỏ vào thư mục tasks/new và truyền username
     res.render('tasks/new', { username: req.session.username });
 };
 
 // [POST] Xử lý thêm công việc
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, date, status, reminderMinutes } = req.body;
+        const { title, description, date, time, reminder, status } = req.body;
         const newTask = new Task({
             title,
             description,
             date,
+            time: time || '00:00',
+            reminder: parseInt(reminder) || 0,
             status,
-            reminderMinutes: parseInt(reminderMinutes),
             user: req.session.userId,
             attachment: req.file ? '/uploads/' + req.file.filename : null
         });
@@ -49,7 +48,6 @@ exports.getEditTaskForm = async (req, res) => {
         if (!task || task.user.toString() !== req.session.userId) {
             return res.redirect('/'); 
         }
-        // Trỏ vào thư mục tasks/edit và truyền username
         res.render('tasks/edit', { task, username: req.session.username });
     } catch (error) {
         console.error(error);
@@ -60,10 +58,10 @@ exports.getEditTaskForm = async (req, res) => {
 // [POST] Xử lý cập nhật công việc
 exports.updateTask = async (req, res) => {
     try {
-        const { title, description, date, status, reminderMinutes } = req.body;
+        const { title, description, date, time, reminder, status } = req.body;
         await Task.findOneAndUpdate(
             { _id: req.params.id, user: req.session.userId }, 
-            { title, description, date, status, reminderMinutes: parseInt(reminderMinutes) }
+            { title, description, date, time, reminder: parseInt(reminder) || 0, status }
         );
         res.redirect('/');
     } catch (error) {
