@@ -15,6 +15,21 @@
             <label class="form-label">Ngày <span class="text-danger">*</span></label>
             <input type="date" name="date" class="form-control" value="<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>" required>
         </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-500">Giờ bắt đầu</label>
+                <input type="time" class="form-control" name="time" required style="border-radius: 8px; border: 1px solid #dadce0;">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-500">Thông báo trước</label>
+                <select class="form-control" name="reminder" style="border-radius: 8px; border: 1px solid #dadce0;">
+                    <option value="0">Không thông báo</option>
+                    <option value="10">10 phút</option>
+                    <option value="15">15 phút</option>
+                    <option value="30">30 phút</option>
+                </select>
+            </div>
+        </div>
         <div class="mb-3">
             <label class="form-label">Trạng thái</label>
             <select name="status" class="form-select">

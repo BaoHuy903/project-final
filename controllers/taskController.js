@@ -24,15 +24,16 @@ exports.getNewTaskForm = (req, res) => {
 // [POST] Xử lý thêm công việc
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, date, status } = req.body;
+        const { title, description, date, status, reminderMinutes } = req.body;
         const newTask = new Task({
             title,
             description,
             date,
             status,
+            reminderMinutes: parseInt(reminderMinutes),
             user: req.session.userId,
             attachment: req.file ? '/uploads/' + req.file.filename : null
-});
+        });
         await newTask.save();
         res.redirect('/');
     } catch (error) {
@@ -59,10 +60,10 @@ exports.getEditTaskForm = async (req, res) => {
 // [POST] Xử lý cập nhật công việc
 exports.updateTask = async (req, res) => {
     try {
-        const { title, description, date, status } = req.body;
+        const { title, description, date, status, reminderMinutes } = req.body;
         await Task.findOneAndUpdate(
             { _id: req.params.id, user: req.session.userId }, 
-            { title, description, date, status }
+            { title, description, date, status, reminderMinutes: parseInt(reminderMinutes) }
         );
         res.redirect('/');
     } catch (error) {

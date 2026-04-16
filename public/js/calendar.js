@@ -87,3 +87,58 @@ function getStatusColor(status) {
 function goToDate(dateStr) {
     console.log('Navigate to:', dateStr);
 }
+
+
+// ==========================================
+// HỆ THỐNG THÔNG BÁO (NOTIFICATION SYSTEM)
+// ==========================================
+
+// 1. Xin quyền gửi thông báo từ máy tính người dùng
+document.addEventListener('DOMContentLoaded', () => {
+    if ("Notification" in window) {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
+});
+
+// 2. Hàm bắn thông báo ra màn hình
+function pushNotification(title, body) {
+    if (Notification.permission === "granted") {
+        new Notification("Task Manager: " + title, {
+            body: body,
+            icon: "https://cdn-icons-png.flaticon.com/512/2693/2693507.png" // Icon cái lịch cho giống GG
+        });
+    } else {
+        // Fallback: Nếu họ chặn quyền notification, dùng alert thường
+        alert(`🔔 NHẮC NHỞ: ${title}\n${body}`);
+    }
+}
+
+// 3. Vòng lặp kiểm tra thời gian (chạy ngầm mỗi 30 giây)
+setInterval(() => {
+    if (!window.tasksData || window.tasksData.length === 0) return;
+
+    const now = new Date();
+
+    tasksData.forEach(task => {
+        // Chỉ xử lý nếu có bật nhắc nhở và chưa bị báo rồi (dùng _notified để đánh dấu)
+        if (task.reminder > 0 && task.date && task.time && !task._notified) {
+            
+            // Gộp ngày và giờ lại để tính toán (vd: 2026-04-16T14:30:00)
+            const taskDateTime = new Date(`${task.date}T${task.time}:00`);
+            
+            // Tính khoảng cách thời gian (ra mili-giây, sau đó đổi ra phút)
+            const diffMs = taskDateTime - now;
+            const diffMins = Math.floor(diffMs / 60000);
+
+            // Bắn thông báo nếu thời gian chênh lệch <= thời gian đã cài đặt (Và lớn hơn 0 để tránh báo việc đã qua)
+            if (diffMins > 0 && diffMins <= task.reminder) {
+                pushNotification(task.title, `Sự kiện sẽ bắt đầu sau ${diffMins} phút nữa (lúc ${task.time}).`);
+                
+                // Đánh dấu là đã báo rồi để giây tiếp theo không bị lặp lại còi réo
+                task._notified = true; 
+            }
+        }
+    });
+}, 30000); // 30,000 ms = 30 giây kiểm tra 1 lần
