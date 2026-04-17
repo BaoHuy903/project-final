@@ -31,7 +31,7 @@ exports.createTask = async (req, res) => {
             date,
             status,
             user: req.session.userId,
-            attachment: req.file ? '/uploads/' + req.file.filename : null
+            attachments: req.files ? req.files.map(file => '/uploads/' + file.filename) : []
 });
         await newTask.save();
         res.redirect('/');

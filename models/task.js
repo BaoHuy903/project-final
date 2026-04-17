@@ -5,9 +5,10 @@ const taskSchema = new mongoose.Schema({
     description: { type: String },
     date: { type: Date, required: true },
     status: { type: String, enum: ['Cần làm', 'Đang làm', 'Hoàn thành'], default: 'Cần làm' },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // 👈 dấu phẩy ở đây
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
-    attachment: { type: String }
+    // 👉 sửa ở đây
+    attachments: [{ type: String }]
 
 }, { timestamps: true });
 

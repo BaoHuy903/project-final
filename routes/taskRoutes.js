@@ -23,7 +23,7 @@ router.use(requireAuth);
 
 router.get('/', taskController.getAllTasks); // Trang chủ
 router.get('/new', taskController.getNewTaskForm); // Trang thêm mới
-router.post('/new', upload.single('attachment'), taskController.createTask); // Xử lý form thêm mới
+router.post('/new', upload.array('attachments', 5), taskController.createTask); // Xử lý form thêm mới
 router.get('/edit/:id', taskController.getEditTaskForm); // Trang sửa
 router.post('/edit/:id', taskController.updateTask); // Xử lý form sửa
 router.post('/delete/:id', taskController.deleteTask); // Xử lý xóa
