@@ -11,18 +11,38 @@
             <label class="form-label">Mô tả</label>
             <textarea name="description" class="form-control" rows="3"></textarea>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Ngày <span class="text-danger">*</span></label>
-            <input type="date" name="date" class="form-control" required>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Ngày <span class="text-danger">*</span></label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Giờ bắt đầu <span class="text-danger">*</span></label>
+                <input type="time" name="time" class="form-control" required>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Trạng thái</label>
-            <select name="status" class="form-select">
-                <option value="Cần làm">Cần làm</option>
-                <option value="Đang làm">Đang làm</option>
-                <option value="Hoàn thành">Hoàn thành</option>
-            </select>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Thông báo trước</label>
+                <select class="form-select" name="reminder">
+                    <option value="0">Không thông báo</option>
+                    <option value="10">10 phút</option>
+                    <option value="15">15 phút</option>
+                    <option value="30">30 phút</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Trạng thái</label>
+                <select name="status" class="form-select">
+                    <option value="Cần làm">Cần làm</option>
+                    <option value="Đang làm">Đang làm</option>
+                    <option value="Hoàn thành">Hoàn thành</option>
+                </select>
+            </div>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Đính kèm</label>
             <input type="file" name="attachments" multiple>

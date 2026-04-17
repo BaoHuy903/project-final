@@ -11,18 +11,38 @@
             <label class="form-label">Mô tả</label>
             <textarea name="description" class="form-control" rows="3"><%= task.description %></textarea>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Ngày <span class="text-danger">*</span></label>
-            <input type="date" name="date" class="form-control" value="<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>" required>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Ngày <span class="text-danger">*</span></label>
+                <input type="date" name="date" class="form-control" value="<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Giờ bắt đầu <span class="text-danger">*</span></label>
+                <input type="time" name="time" class="form-control" value="<%= task.time %>" required>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Trạng thái</label>
-            <select name="status" class="form-select">
-                <option value="Cần làm" <%= task.status === 'Cần làm' ? 'selected' : '' %>>Cần làm</option>
-                <option value="Đang làm" <%= task.status === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
-                <option value="Hoàn thành" <%= task.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
-            </select>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Thông báo trước</label>
+                <select class="form-select" name="reminder">
+                    <option value="0" <%= task.reminder === 0 ? 'selected' : '' %>>Không thông báo</option>
+                    <option value="10" <%= task.reminder === 10 ? 'selected' : '' %>>10 phút</option>
+                    <option value="15" <%= task.reminder === 15 ? 'selected' : '' %>>15 phút</option>
+                    <option value="30" <%= task.reminder === 30 ? 'selected' : '' %>>30 phút</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Trạng thái</label>
+                <select name="status" class="form-select">
+                    <option value="Cần làm" <%= task.status === 'Cần làm' ? 'selected' : '' %>>Cần làm</option>
+                    <option value="Đang làm" <%= task.status === 'Đang làm' ? 'selected' : '' %>>Đang làm</option>
+                    <option value="Hoàn thành" <%= task.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
+                </select>
+            </div>
         </div>
+        
         <button type="submit" class="btn btn-primary">Cập nhật</button>
         <a href="/" class="btn btn-secondary">Hủy</a>
     </form>

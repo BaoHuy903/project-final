@@ -27,6 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     calendar.render();
+
+    // Yêu cầu quyền gửi thông báo khi trang load
+    if ("Notification" in window) {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
 });
 
 function openNewTaskModal() {
@@ -38,72 +45,30 @@ function showTaskDetail(event) {
     const modal = new bootstrap.Modal(document.getElementById('taskDetailModal'));
     const content = document.getElementById('taskDetailContent');
     
-    // 1. Tạo HTML cơ bản cho chi tiết công việc
-    let htmlContent = `
+    content.innerHTML = `
         <div>
             <h6 style="color: #5f6368; margin-bottom: 8px;">Tiêu đề</h6>
-            <p style="margin-bottom: 16px; font-weight: 500;">${event.title}</p>
+            <p style="margin-bottom: 16px; font-weight: 500; font-size: 1.1rem;">${event.title}</p>
             
-            <h6 style="color: #5f6368; margin-bottom: 8px;">Mô tả</h6>
-            <p style="margin-bottom: 16px;">${event.extendedProps.description || 'Không có'}</p>
-            
-            <h6 style="color: #5f6368; margin-bottom: 8px;">Ngày</h6>
-            <p style="margin-bottom: 16px;">${event.start.toLocaleDateString('vi-VN')}</p>
-            
+            <div class="row">
+                <div class="col-6">
+                    <h6 style="color: #5f6368; margin-bottom: 8px;">Thời gian</h6>
+                    <p style="margin-bottom: 16px;">
+                        ${event.start.toLocaleDateString('vi-VN')} <br>
+                        <strong>Lúc: ${timeStr}</strong>
+                    </p>
+                </div>
+                <div class="col-6">
+                    <h6 style="color: #5f6368; margin-bottom: 8px;">Nhắc nhở</h6>
+                    <p style="margin-bottom: 16px;">${reminderStr}</p>
+                </div>
+            </div>
+
             <h6 style="color: #5f6368; margin-bottom: 8px;">Trạng thái</h6>
             <p><span class="badge" style="background-color: ${getStatusColor(event.extendedProps.status)}">${event.extendedProps.status}</span></p>
+        </div>
     `;
-
-    // 2. Xử lý hiển thị danh sách file đính kèm
-    const attachmentsStr = event.extendedProps.attachments; // Dữ liệu đang là chuỗi "file1.jpg,file2.pdf"
     
-    // Nếu có chuỗi đính kèm và không rỗng
-    if (attachmentsStr && attachmentsStr.trim() !== "") {
-        // Tách chuỗi thành mảng dựa vào dấu phẩy
-        const attachments = attachmentsStr.split(',');
-        
-        htmlContent += `
-            <div style="border-top: 1px solid #dadce0; margin-top: 16px; padding-top: 16px;">
-                <h6 style="color: #5f6368; margin-bottom: 12px;">Tệp đính kèm (${attachments.length})</h6>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-        `;
-
-        attachments.forEach(fileUrl => {
-            const url = fileUrl.trim();
-            if (!url) return; // Bỏ qua nếu url rỗng
-            
-            // Kiểm tra đuôi file xem có phải là ảnh không
-            const isImage = url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
-            const fileName = url.split('/').pop() || 'Xem tệp đính kèm'; // Lấy tên file từ URL
-            
-            if (isImage) {
-                // Nếu là ảnh -> Hiển thị ảnh
-                htmlContent += `
-                    <div>
-                        <a href="/${url.replace(/^\/+/, '')}" target="_blank">
-                            <img src="/${url.replace(/^\/+/, '')}" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #dadce0; object-fit: contain;">
-                        </a>
-                    </div>`;
-            } else {
-                // Nếu là Word, PDF... -> Hiển thị nút bấm
-                htmlContent += `
-                    <div>
-                        <a href="/${url.replace(/^\/+/, '')}" target="_blank" style="display: inline-block; padding: 6px 12px; background: #f1f3f4; color: #1a73e8; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500;">
-                            📄 ${fileName}
-                        </a>
-                    </div>`;
-            }
-        });
-
-        htmlContent += `</div></div>`;
-    }
-
-    htmlContent += `</div>`;
-    
-    // 3. Gắn HTML vào Modal
-    content.innerHTML = htmlContent;
-    
-    // 4. Xử lý sự kiện cho nút Sửa / Xóa
     document.getElementById('editTaskBtn').onclick = () => {
         window.location.href = `/edit/${event.id}`;
     };
@@ -137,3 +102,66 @@ function getStatusColor(status) {
 function goToDate(dateStr) {
     console.log('Navigate to:', dateStr);
 }
+
+// ==========================================
+// HỆ THỐNG THÔNG BÁO CÓ ÂM THANH (TỰ TẠO TIẾNG BÍP)
+// ==========================================
+
+// Hàm tự tạo âm thanh "Ting"
+function playNotificationSound() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        osc.type = 'sine'; // Loại sóng âm thanh
+        osc.frequency.setValueAtTime(880, ctx.currentTime); // Tần số nốt cao
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1); // Hạ tone tạo độ vang
+
+        gainNode.gain.setValueAtTime(1, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5); // Nhỏ dần và tắt sau 0.5s
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+        console.log("Trình duyệt chặn phát âm thanh:", e);
+    }
+}
+
+function pushNotification(title, body) {
+    // Phát âm thanh
+    playNotificationSound();
+
+    if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("Nhắc nhở công việc: " + title, {
+            body: body,
+            icon: "https://cdn-icons-png.flaticon.com/512/2693/2693507.png"
+        });
+    } else {
+        alert(`🔔 NHẮC NHỞ: ${title}\n${body}`);
+    }
+}
+
+// Chạy ngầm kiểm tra mỗi 30 giây
+setInterval(() => {
+    if (typeof tasksData === 'undefined' || tasksData.length === 0) return;
+
+    const now = new Date();
+
+    tasksData.forEach(task => {
+        if (task.reminder > 0 && task.date && task.time && !task._notified) {
+            const taskDateTime = new Date(`${task.date}T${task.time}:00`);
+            const diffMs = taskDateTime - now;
+            const diffMins = Math.floor(diffMs / 60000);
+
+            if (diffMins >= 0 && diffMins <= task.reminder) {
+                pushNotification(task.title, `Công việc sẽ bắt đầu lúc ${task.time} (${diffMins} phút nữa).`);
+                task._notified = true; 
+            }
+        }
+    });
+}, 30000);
