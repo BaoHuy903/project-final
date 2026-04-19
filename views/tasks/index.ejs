@@ -50,13 +50,17 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label fw-500">Ngày</label>
                             <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-500">Giờ bắt đầu</label>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-500">Bắt đầu</label>
                             <input type="time" class="form-control" name="time" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-500">Kết thúc</label>
+                            <input type="time" class="form-control" name="endTime" style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
                     </div>
 
@@ -124,6 +128,7 @@
                     title: "<%= task.title %>",
                     date: "<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>",
                     time: "<%= task.time || '00:00' %>",
+                    endTime: "<%= task.endTime || '' %>",
                     reminder: <%= task.reminder || 0 %>,
                     description: "<%= task.description %>",
                     status: "<%= task.status %>",
@@ -134,19 +139,32 @@
     ];
     
     // eslint-disable-next-line
-    window.tasksData = tasksData.map(task => ({
-        id: task.id,
-        title: task.title,
-        date: task.date,
-        backgroundColor: task.color,
-        borderColor: task.color,
-        extendedProps: {
-            description: task.description,
-            status: task.status,
-            time: task.time,
-            reminder: task.reminder
+    window.tasksData = tasksData.map(task => {
+        let startDateTime = task.date;
+        if (task.time) startDateTime += 'T' + task.time + ':00';
+
+        let endDateTime = null;
+        if (task.endTime && task.endTime.trim() !== '') {
+            endDateTime = task.date + 'T' + task.endTime + ':00';
         }
-    }));
+
+        return {
+            id: task.id,
+            title: task.title,
+            start: startDateTime,
+            end: endDateTime, 
+            allDay: false, // QUAN TRỌNG: Ép FullCalendar hiểu đây là event có giờ cụ thể, hiện đúng trong TimeGrid (Day/Week)
+            backgroundColor: task.color,
+            borderColor: task.color,
+            extendedProps: {
+                description: task.description,
+                status: task.status,
+                time: task.time,
+                endTime: task.endTime,
+                reminder: task.reminder
+            }
+        };
+    });
 </script>
 
 <script src="/js/calendar.js"></script>

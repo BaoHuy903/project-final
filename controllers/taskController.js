@@ -22,12 +22,14 @@ exports.getNewTaskForm = (req, res) => {
 // [POST] Xử lý thêm công việc
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, date, time, reminder, status } = req.body;
+        // THÊM endTime vào đây
+        const { title, description, date, time, endTime, reminder, status } = req.body;
         const newTask = new Task({
             title,
             description,
             date,
             time: time || '00:00',
+            endTime, // Gắn vào object lưu database
             reminder: parseInt(reminder) || 0,
             status,
             user: req.session.userId,
@@ -58,10 +60,11 @@ exports.getEditTaskForm = async (req, res) => {
 // [POST] Xử lý cập nhật công việc
 exports.updateTask = async (req, res) => {
     try {
-        const { title, description, date, time, reminder, status } = req.body;
+        // THÊM endTime vào đây
+        const { title, description, date, time, endTime, reminder, status } = req.body;
         await Task.findOneAndUpdate(
             { _id: req.params.id, user: req.session.userId }, 
-            { title, description, date, time, reminder: parseInt(reminder) || 0, status }
+            { title, description, date, time, endTime, reminder: parseInt(reminder) || 0, status } // Cập nhật endTime
         );
         res.redirect('/');
     } catch (error) {
