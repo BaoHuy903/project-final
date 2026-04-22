@@ -23,6 +23,14 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: function(info) {
             showTaskDetail(info.event);
         },
+        // MỚI: Click vào ngày bất kỳ để mở modal thêm công việc
+        dateClick: function(info) {
+            const dateInput = document.querySelector('#taskModal input[name="date"]');
+            if (dateInput) {
+                dateInput.value = info.dateStr; // Tự động điền ngày vừa click
+            }
+            openNewTaskModal();
+        },
         locale: 'vi'
     });
     
@@ -45,6 +53,14 @@ function showTaskDetail(event) {
     const modal = new bootstrap.Modal(document.getElementById('taskDetailModal'));
     const content = document.getElementById('taskDetailContent');
     
+    const timeStr = event.extendedProps.time ? event.extendedProps.time : '00:00';
+    // Xử lý chuỗi giờ kết thúc
+    const endTimeStr = (event.extendedProps.endTime && event.extendedProps.endTime.trim() !== '') 
+        ? ` đến ${event.extendedProps.endTime}` 
+        : '';
+        
+    const reminderStr = event.extendedProps.reminder > 0 ? `Báo trước ${event.extendedProps.reminder} phút` : 'Không thông báo';
+
     content.innerHTML = `
         <div>
             <h6 style="color: #5f6368; margin-bottom: 8px;">Tiêu đề</h6>
@@ -55,7 +71,7 @@ function showTaskDetail(event) {
                     <h6 style="color: #5f6368; margin-bottom: 8px;">Thời gian</h6>
                     <p style="margin-bottom: 16px;">
                         ${event.start.toLocaleDateString('vi-VN')} <br>
-                        <strong>Lúc: ${timeStr}</strong>
+                        <strong style="color: #1a73e8;">Từ: ${timeStr}${endTimeStr}</strong>
                     </p>
                 </div>
                 <div class="col-6">
@@ -65,7 +81,16 @@ function showTaskDetail(event) {
             </div>
 
             <h6 style="color: #5f6368; margin-bottom: 8px;">Trạng thái</h6>
-            <p><span class="badge" style="background-color: ${getStatusColor(event.extendedProps.status)}">${event.extendedProps.status}</span></p>
+            <p style="margin-bottom: 16px;">
+                <span class="badge" style="background-color: ${getStatusColor(event.extendedProps.status)}">
+                    ${event.extendedProps.status}
+                </span>
+            </p>
+
+            <h6 style="color: #5f6368; margin-bottom: 8px;">Mô tả chi tiết</h6>
+            <p style="margin-bottom: 16px; background: #f8f9fa; padding: 10px; border-radius: 8px; white-space: pre-line;">
+                ${event.extendedProps.description || 'Không có mô tả'}
+            </p>
         </div>
     `;
     
@@ -107,7 +132,6 @@ function goToDate(dateStr) {
 // HỆ THỐNG THÔNG BÁO CÓ ÂM THANH (TỰ TẠO TIẾNG BÍP)
 // ==========================================
 
-// Hàm tự tạo âm thanh "Ting"
 function playNotificationSound() {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -115,12 +139,12 @@ function playNotificationSound() {
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
-        osc.type = 'sine'; // Loại sóng âm thanh
-        osc.frequency.setValueAtTime(880, ctx.currentTime); // Tần số nốt cao
-        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1); // Hạ tone tạo độ vang
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
 
         gainNode.gain.setValueAtTime(1, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5); // Nhỏ dần và tắt sau 0.5s
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
 
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
@@ -133,7 +157,6 @@ function playNotificationSound() {
 }
 
 function pushNotification(title, body) {
-    // Phát âm thanh
     playNotificationSound();
 
     if ("Notification" in window && Notification.permission === "granted") {
@@ -146,7 +169,6 @@ function pushNotification(title, body) {
     }
 }
 
-// Chạy ngầm kiểm tra mỗi 30 giây
 setInterval(() => {
     if (typeof tasksData === 'undefined' || tasksData.length === 0) return;
 
