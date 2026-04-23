@@ -1,10 +1,14 @@
-/* Tùy chỉnh chung để Footer luôn ở dưới đáy trang */
+/* ===== Google Calendar Style ===== */
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
-    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn trang */
+    background-color: #ffffff;
 }
 
 /* Đẩy nội dung chính giãn ra để ép footer xuống */
@@ -12,73 +16,279 @@ html, body {
     flex: 1;
 }
 
-/* Tùy chỉnh form Đăng nhập / Đăng ký */
-.auth-form {
-    max-width: 400px;
-    margin: 50px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* ===== Calendar Layout ===== */
+.calendar-container {
+    display: flex;
+    height: calc(100% - 60px);
+    background-color: #fff;
 }
 
-.auth-form h2 {
-    text-align: center;
+.calendar-sidebar {
+    width: 280px;
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: 16px;
+    overflow-y: auto;
+    min-height: 100vh;
+
+    /* thêm */
+    box-shadow: 1px 0 3px rgba(0,0,0,0.05);
+}
+.calendar-main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+}
+
+/* Mini Calendar */
+#mini-calendar {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 12px;
     margin-bottom: 20px;
-    font-weight: bold;
-    color: #333;
+    border: 1px solid #e8eaed;
 }
 
-/* Hiệu ứng hover cho thẻ Công việc (Card) ở trang chủ */
-.card {
+/* Task List */
+.task-list {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    margin-bottom: 6px;
+}
+
+.task-item:hover {
+    background-color: #f1f3f4;
+    transform: translateX(2px); /* hiệu ứng nhẹ */
+}
+
+.task-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+}
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #202124;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-date {
+    font-size: 12px;
+    color: #9aa0a6;
+    margin-top: 2px;
+}
+
+/* FullCalendar Customization */
+.fc {
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.fc .fc-button-primary {
+    background-color: #4285f4 !important;
+    border-color: #4285f4 !important;
+    border-radius: 6px !important;
+    text-transform: none !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 6px 16px !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+.fc .fc-button-primary.fc-button-active {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+.fc-header-toolbar {
+    padding: 16px 0;
+    margin-bottom: 16px;
+}
+
+.fc-toolbar-title {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+
+.fc-col-header-cell {
+    background-color: #fafbfc;
+    border-color: #dadce0 !important;
+    color: #5f6368;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 12px 0 !important;
+}
+
+.fc-daygrid-day {
+    background-color: #fff;
+    border-color: #e8eaed !important;
+}
+
+.fc-daygrid-day:hover {
+    background-color: #f8f9fa;
+}
+
+.fc-daygrid-day-number {
+    padding: 8px 6px;
+    color: #202124;
+    font-size: 13px;
+}
+
+.fc-daygrid-day.fc-day-other {
+    background-color: #fafbfc;
+}
+
+.fc-daygrid-day.fc-day-today {
+    background-color: #e8f0fe;
+    border: 1px solid #4285f4 !important;
+}
+
+.fc-daygrid-day-frame {
+    min-height: 100px;
+}
+
+.fc-event {
+    border-radius: 6px !important;
+    padding: 4px 6px !important;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.fc-event-title {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0 4px;
+    white-space: normal;
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 16px;
     border: none;
-    border-radius: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+.modal-header {
+    background-color: #fff;
 }
 
-.card-footer {
-    border-top: 1px solid #f0f0f0;
+.modal-body {
+    background-color: #fff;
 }
 
-/* Tùy chỉnh Footer */
+.modal-footer {
+    background-color: #fff;
+}
+
+.form-control {
+    border: 1px solid #dadce0 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+}
+
+.form-control:focus {
+    border-color: #4285f4 !important;
+    box-shadow: 0 1px 3px 0 rgba(66, 133, 244, 0.3) !important;
+}
+
+.form-label {
+    font-size: 13px;
+    color: #5f6368;
+    font-weight: 500;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #4285f4 !important;
+    border-color: #4285f4 !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+}
+
+.btn-primary:hover {
+    background-color: #1a73e8 !important;
+    border-color: #1a73e8 !important;
+}
+
+/* Badge Styles */
+.badge {
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dadce0;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bdc1c6;
+}
+
+/* Footer */
 .site-footer {
-    background-color: #212529; /* Cùng màu với navbar dark */
-    color: #fff;
+    background-color: #fff;
+    color: #5f6368;
     text-align: center;
     padding: 15px 0;
     width: 100%;
-    margin-top: auto; /* Thuộc tính quan trọng đi kèm flexbox để đẩy xuống đáy */
+    margin-top: auto;
+    border-top: 1px solid #dadce0;
+}
+/* mode con create */
+.btn-create {
+    background: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: 0.2s;
 }
 
-.site-footer p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-/* Thêm CSS cho banner chào mừng lớn */
-.bg-primary {
-    background-color: #0d6efd !important; /* Màu xanh Bootstrap mặc định */
-}
-
-.text-white {
-    color: #fff !important;
-}
-
-.p-5 {
-    padding: 3rem !important;
-}
-
-.mb-5 {
-    margin-bottom: 3rem !important;
-}
-
-.lead {
-    font-size: 1.25rem;
-    font-weight: 300;
+.btn-create:hover {
+    background: #f1f3f4;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
