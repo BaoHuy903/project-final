@@ -86,7 +86,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-500">Đính kèm</label>
-                        <input type="file" name="attachment" class="form-control">
+                        <input type="file" name="attachments" class="form-control" multiple>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
@@ -132,7 +132,8 @@
                     reminder: <%= task.reminder || 0 %>,
                     description: "<%= task.description %>",
                     status: "<%= task.status %>",
-                    color: "<%= getColorByStatus(task.status) %>"
+                    color: "<%= getColorByStatus(task.status) %>",
+                    attachments: "<%= task.attachments ? task.attachments.join(',') : '' %>"
                 }<%= index < tasks.length - 1 ? ',' : '' %>
             <% }) %>
         <% } %>
@@ -146,6 +147,7 @@
         let endDateTime = null;
         if (task.endTime && task.endTime.trim() !== '') {
             endDateTime = task.date + 'T' + task.endTime + ':00';
+            attachments: task.attachments
         }
 
         return {
