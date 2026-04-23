@@ -4,6 +4,7 @@ const Task = require('../models/task');
 exports.getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({ user: req.session.userId }).sort({ createdAt: -1 });
+        // Trỏ vào thư mục tasks/index
         res.render('tasks/index', { 
             tasks, 
             username: req.session.username 
@@ -16,6 +17,7 @@ exports.getAllTasks = async (req, res) => {
 
 // [GET] Form thêm công việc mới
 exports.getNewTaskForm = (req, res) => {
+    // Trỏ vào thư mục tasks/new và truyền username
     res.render('tasks/new', { username: req.session.username });
 };
 
@@ -32,8 +34,7 @@ exports.createTask = async (req, res) => {
             endTime,
             reminder: parseInt(reminder) || 0,
             status,
-            user: req.session.userId,
-            attachment: req.file ? '/uploads/' + req.file.filename : null
+            user: req.session.userId 
         });
         await newTask.save();
         res.redirect('/');
@@ -50,6 +51,7 @@ exports.getEditTaskForm = async (req, res) => {
         if (!task || task.user.toString() !== req.session.userId) {
             return res.redirect('/'); 
         }
+        // Trỏ vào thư mục tasks/edit và truyền username
         res.render('tasks/edit', { task, username: req.session.username });
     } catch (error) {
         console.error(error);

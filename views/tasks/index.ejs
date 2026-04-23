@@ -92,7 +92,7 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-500">Đính kèm</label>
-                        <input type="file" name="attachment" class="form-control">
+                        <input type="file" name="attachments" class="form-control" multiple>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
@@ -139,7 +139,8 @@
                     reminder: <%= task.reminder || 0 %>,
                     description: "<%= task.description %>",
                     status: "<%= task.status %>",
-                    color: "<%= getColorByStatus(task.status) %>"
+                    color: "<%= getColorByStatus(task.status) %>",
+                    attachments: "<%= task.attachments ? task.attachments.join(',') : '' %>"
                 }<%= index < tasks.length - 1 ? ',' : '' %>
             <% }) %>
         <% } %>
@@ -157,6 +158,8 @@
             endDateTime = finalEndDate + 'T' + task.endTime + ':00';
         } else if (task.endDate && task.endDate !== task.date) {
             endDateTime = finalEndDate + 'T23:59:00'; // Đặt giờ ảo để block có thể kéo qua ngày
+            endDateTime = task.date + 'T' + task.endTime + ':00';
+            attachments: task.attachments
         }
 
         return {

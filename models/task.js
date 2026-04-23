@@ -10,7 +10,10 @@ const taskSchema = new mongoose.Schema({
     reminder: { type: Number, default: 0 },
     status: { type: String, enum: ['Cần làm', 'Đang làm', 'Hoàn thành'], default: 'Cần làm' },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    attachment: { type: String }
+
+    // 👉 sửa ở đây
+    attachments: [{ type: String }]
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Task', taskSchema);
