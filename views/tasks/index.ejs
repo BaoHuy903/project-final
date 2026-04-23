@@ -50,16 +50,22 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label fw-500">Ngày</label>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Ngày bắt đầu</label>
                             <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label fw-500">Bắt đầu</label>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Giờ bắt đầu</label>
                             <input type="time" class="form-control" name="time" required style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label fw-500">Kết thúc</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Ngày kết thúc</label>
+                            <input type="date" class="form-control" name="endDate" style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Giờ kết thúc</label>
                             <input type="time" class="form-control" name="endTime" style="border-radius: 8px; border: 1px solid #dadce0;">
                         </div>
                     </div>
@@ -127,6 +133,7 @@
                     id: "<%= task._id %>",
                     title: "<%= task.title %>",
                     date: "<%= task.date ? new Date(task.date).toISOString().split('T')[0] : '' %>",
+                    endDate: "<%= task.endDate ? new Date(task.endDate).toISOString().split('T')[0] : '' %>",
                     time: "<%= task.time || '00:00' %>",
                     endTime: "<%= task.endTime || '' %>",
                     reminder: <%= task.reminder || 0 %>,
@@ -144,8 +151,12 @@
         if (task.time) startDateTime += 'T' + task.time + ':00';
 
         let endDateTime = null;
+        let finalEndDate = task.endDate || task.date; // Lấy ngày kết thúc hoặc mặc định là ngày bắt đầu
+        
         if (task.endTime && task.endTime.trim() !== '') {
-            endDateTime = task.date + 'T' + task.endTime + ':00';
+            endDateTime = finalEndDate + 'T' + task.endTime + ':00';
+        } else if (task.endDate && task.endDate !== task.date) {
+            endDateTime = finalEndDate + 'T23:59:00'; // Đặt giờ ảo để block có thể kéo qua ngày
         }
 
         return {
@@ -153,7 +164,7 @@
             title: task.title,
             start: startDateTime,
             end: endDateTime, 
-            allDay: false, // QUAN TRỌNG: Ép FullCalendar hiểu đây là event có giờ cụ thể, hiện đúng trong TimeGrid (Day/Week)
+            allDay: false, 
             backgroundColor: task.color,
             borderColor: task.color,
             extendedProps: {
@@ -161,6 +172,7 @@
                 status: task.status,
                 time: task.time,
                 endTime: task.endTime,
+                endDate: task.endDate, // Chuyền cho modal chi tiết
                 reminder: task.reminder
             }
         };

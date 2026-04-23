@@ -23,12 +23,15 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: function(info) {
             showTaskDetail(info.event);
         },
-        // MỚI: Click vào ngày bất kỳ để mở modal thêm công việc
+        // SỰ KIỆN: Click vào ngày trên lịch để mở modal thêm công việc
         dateClick: function(info) {
             const dateInput = document.querySelector('#taskModal input[name="date"]');
-            if (dateInput) {
-                dateInput.value = info.dateStr; // Tự động điền ngày vừa click
-            }
+            const endDateInput = document.querySelector('#taskModal input[name="endDate"]');
+            
+            // Tự động điền ngày vừa click vào ô Ngày bắt đầu và Ngày kết thúc
+            if (dateInput) dateInput.value = info.dateStr;
+            if (endDateInput) endDateInput.value = info.dateStr; 
+            
             openNewTaskModal();
         },
         locale: 'vi'
@@ -53,12 +56,29 @@ function showTaskDetail(event) {
     const modal = new bootstrap.Modal(document.getElementById('taskDetailModal'));
     const content = document.getElementById('taskDetailContent');
     
+    // Xử lý chuỗi NGÀY bắt đầu và kết thúc
+    const startDateStr = event.start.toLocaleDateString('vi-VN');
+    let endDateStr = startDateStr;
+
+    if (event.extendedProps.endDate) {
+        const endD = new Date(event.extendedProps.endDate);
+        if (!isNaN(endD.getTime())) {
+            endDateStr = endD.toLocaleDateString('vi-VN');
+        }
+    }
+
+    let dateDisplay = startDateStr;
+    // Nếu có ngày kết thúc khác với ngày bắt đầu thì hiển thị dạng: DD/MM/YYYY -> DD/MM/YYYY
+    if (startDateStr !== endDateStr) {
+        dateDisplay = `${startDateStr} <span style="color: #5f6368; margin: 0 5px;">&rarr;</span> ${endDateStr}`;
+    }
+    
+    // Xử lý chuỗi GIỜ bắt đầu và kết thúc
     const timeStr = event.extendedProps.time ? event.extendedProps.time : '00:00';
-    // Xử lý chuỗi giờ kết thúc
     const endTimeStr = (event.extendedProps.endTime && event.extendedProps.endTime.trim() !== '') 
         ? ` đến ${event.extendedProps.endTime}` 
         : '';
-        
+
     const reminderStr = event.extendedProps.reminder > 0 ? `Báo trước ${event.extendedProps.reminder} phút` : 'Không thông báo';
 
     content.innerHTML = `
@@ -70,8 +90,8 @@ function showTaskDetail(event) {
                 <div class="col-6">
                     <h6 style="color: #5f6368; margin-bottom: 8px;">Thời gian</h6>
                     <p style="margin-bottom: 16px;">
-                        ${event.start.toLocaleDateString('vi-VN')} <br>
-                        <strong style="color: #1a73e8;">Từ: ${timeStr}${endTimeStr}</strong>
+                        ${dateDisplay} <br>
+                        <strong style="color: #1a73e8;">Lúc: ${timeStr}${endTimeStr}</strong>
                     </p>
                 </div>
                 <div class="col-6">
@@ -140,11 +160,11 @@ function playNotificationSound() {
         const gainNode = ctx.createGain();
 
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(880, ctx.currentTime); 
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1); 
 
         gainNode.gain.setValueAtTime(1, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5); 
 
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
