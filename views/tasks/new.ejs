@@ -13,15 +13,21 @@
         </div>
         
         <div class="row">
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Ngày <span class="text-danger">*</span></label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
                 <input type="date" name="date" class="form-control" required>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">Giờ bắt đầu <span class="text-danger">*</span></label>
                 <input type="time" name="time" class="form-control" required>
             </div>
-            <div class="col-md-4 mb-3">
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Ngày kết thúc</label>
+                <input type="date" name="endDate" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
                 <label class="form-label">Giờ kết thúc</label>
                 <input type="time" name="endTime" class="form-control">
             </div>
@@ -49,11 +55,38 @@
 
         <div class="mb-3">
             <label class="form-label">Đính kèm</label>
-            <input type="file" name="attachment" class="form-control">
+            <input type="file" name="attachments" multiple>
         </div>
+
+        <div class="row border-top pt-3 mt-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Quyền riêng tư</label>
+                <select class="form-select" name="visibility" id="visibilitySelect">
+                    <option value="private">Chỉ mình tôi (Private)</option>
+                    <option value="public">Tất cả mọi người (Public)</option>
+                    <option value="shared">Chia sẻ với người cụ thể</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3" id="sharedWithDiv" style="display: none;">
+                <label class="form-label fw-bold">Chọn người chia sẻ (Giữ Ctrl để chọn nhiều)</label>
+                <select class="form-select" name="sharedWith" multiple style="height: 100px;">
+                    <% users.forEach(u => { %>
+                        <option value="<%= u._id %>"><%= u.username %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        
         <button type="submit" class="btn btn-success">Lưu công việc</button>
         <a href="/" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
+
+<script>
+    // Logic ẩn hiện ô chọn người dùng
+    document.getElementById('visibilitySelect').addEventListener('change', function() {
+        document.getElementById('sharedWithDiv').style.display = this.value === 'shared' ? 'block' : 'none';
+    });
+</script>
 
 <%- include('../partials/footer') %>
