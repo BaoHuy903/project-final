@@ -140,7 +140,14 @@
                     description: "<%= task.description %>",
                     status: "<%= task.status %>",
                     color: "<%= getColorByStatus(task.status) %>",
-                    attachments: "<%= task.attachments ? task.attachments.join(',') : '' %>"
+                    attachments: "<%= task.attachments ? task.attachments.join(',') : '' %>",
+                    // Dữ liệu mới
+                    creatorId: "<%= task.user && task.user._id ? task.user._id.toString() : '' %>",
+                    creatorName: "<%= task.user && task.user.username ? task.user.username : 'Unknown' %>",
+                    currentUserId: "<%= currentUserId %>",
+                    visibility: "<%= task.visibility %>",
+                    // Lấy mảng comments (chuyển qua JSON để tránh lỗi dấu phẩy)
+                    comments: <%- JSON.stringify(task.comments || []) %>
                 }<%= index < tasks.length - 1 ? ',' : '' %>
             <% }) %>
         <% } %>
@@ -175,8 +182,14 @@
                 status: task.status,
                 time: task.time,
                 endTime: task.endTime,
-                endDate: task.endDate, // Chuyền cho modal chi tiết
-                reminder: task.reminder
+                endDate: task.endDate,
+                reminder: task.reminder,
+                attachments: task.attachments,
+                creatorId: task.creatorId,
+                creatorName: task.creatorName,
+                currentUserId: task.currentUserId,
+                visibility: task.visibility,
+                comments: task.comments
             }
         };
     });
