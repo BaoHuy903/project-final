@@ -11,7 +11,6 @@ html, body {
     background-color: #ffffff;
 }
 
-/* Đẩy nội dung chính giãn ra để ép footer xuống */
 .container {
     flex: 1;
 }
@@ -30,10 +29,9 @@ html, body {
     padding: 16px;
     overflow-y: auto;
     min-height: 100vh;
-
-    /* thêm */
     box-shadow: 1px 0 3px rgba(0,0,0,0.05);
 }
+
 .calendar-main {
     flex: 1;
     padding: 20px;
@@ -70,7 +68,7 @@ html, body {
 
 .task-item:hover {
     background-color: #f1f3f4;
-    transform: translateX(2px); /* hiệu ứng nhẹ */
+    transform: translateX(2px);
 }
 
 .task-dot {
@@ -80,6 +78,7 @@ html, body {
     margin-right: 10px;
     box-shadow: 0 0 4px rgba(0,0,0,0.2);
 }
+
 .task-info {
     flex: 1;
     min-width: 0;
@@ -100,7 +99,7 @@ html, body {
     margin-top: 2px;
 }
 
-/* FullCalendar Customization */
+/* ===== FullCalendar ===== */
 .fc {
     background: #fff;
     border-radius: 16px;
@@ -176,7 +175,6 @@ html, body {
     min-height: 100px;
 }
 
-/* Sự kiện cả ngày hoặc sự kiện nhiều ngày */
 .fc .fc-daygrid-day-events {
     margin-bottom: 0;
 }
@@ -210,12 +208,10 @@ html, body {
     color: #fff;
 }
 
-/* Sự kiện cả ngày (all-day events) */
 .fc .fc-daygrid-day-frame .fc-daygrid-day-events .fc-event {
     margin-bottom: 2px;
 }
 
-/* Sự kiện kéo dài nhiều ngày */
 .fc .fc-daygrid-block-event {
     border-radius: 4px !important;
 }
@@ -224,25 +220,18 @@ html, body {
     padding: 1px 3px !important;
 }
 
-/* Modal Styling */
+/* ===== Modal ===== */
 .modal-content {
     border-radius: 16px;
     border: none;
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
-.modal-header {
-    background-color: #fff;
-}
+.modal-header { background-color: #fff; }
+.modal-body { background-color: #fff; }
+.modal-footer { background-color: #fff; }
 
-.modal-body {
-    background-color: #fff;
-}
-
-.modal-footer {
-    background-color: #fff;
-}
-
+/* ===== Form ===== */
 .form-control {
     border: 1px solid #dadce0 !important;
     font-size: 13px !important;
@@ -260,7 +249,7 @@ html, body {
     font-weight: 500;
 }
 
-/* Button Styles */
+/* ===== Buttons ===== */
 .btn-primary {
     background-color: #4285f4 !important;
     border-color: #4285f4 !important;
@@ -274,43 +263,6 @@ html, body {
     border-color: #1a73e8 !important;
 }
 
-/* Badge Styles */
-.badge {
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 8px;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #dadce0;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #bdc1c6;
-}
-
-/* Footer */
-.site-footer {
-    background-color: #fff;
-    color: #5f6368;
-    text-align: center;
-    padding: 15px 0;
-    width: 100%;
-    margin-top: auto;
-    border-top: 1px solid #dadce0;
-}
-/* mode con create */
 .btn-create {
     background: #fff;
     border: 1px solid #dadce0;
@@ -324,4 +276,29 @@ html, body {
 .btn-create:hover {
     background: #f1f3f4;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ===== Badge ===== */
+.badge {
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #bdc1c6; }
+
+/* ===== Footer ===== */
+.site-footer {
+    background-color: #fff;
+    color: #5f6368;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+    margin-top: auto;
+    border-top: 1px solid #dadce0;
 }

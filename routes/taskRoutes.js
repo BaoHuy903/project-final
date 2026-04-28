@@ -16,11 +16,10 @@ const storage = multer.diskStorage({
     }
 });
 
-// Bộ lọc: Chỉ cho phép ảnh và file văn bản (doc, pdf, xls...)
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|txt|xls|xlsx/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    
+
     if (extname) {
         return cb(null, true);
     } else {
@@ -28,27 +27,21 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-const upload = multer({ 
+const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 10 * 1024 * 1024 } // Giới hạn file 10MB
+    limits: { fileSize: 10 * 1024 * 1024 }
 });
 
+// Tất cả routes yêu cầu đăng nhập
 router.use(requireAuth);
 
 router.get('/', taskController.getAllTasks);
 router.get('/new', taskController.getNewTaskForm);
-
-// 👉 Gắn upload.array vào form Thêm mới
-router.post('/new', upload.array('attachments', 5), taskController.createTask); 
-
+router.post('/new', upload.array('attachments', 5), taskController.createTask);
 router.get('/edit/:id', taskController.getEditTaskForm);
-
-// 👉 Gắn upload.array vào form Sửa
-router.post('/edit/:id', upload.array('attachments', 5), taskController.updateTask); 
-
+router.post('/edit/:id', upload.array('attachments', 5), taskController.updateTask);
 router.post('/delete/:id', taskController.deleteTask);
-
 router.post('/comment/:id', taskController.addComment);
 
 module.exports = router;

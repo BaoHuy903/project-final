@@ -31,6 +31,7 @@
     </div>
 </div>
 
+<!-- Modal: Thêm công việc -->
 <div class="modal fade" id="taskModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -48,7 +49,7 @@
                         <label class="form-label fw-500">Mô tả</label>
                         <textarea class="form-control" name="description" rows="3" style="border-radius: 8px; border: 1px solid #dadce0;"></textarea>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-500">Ngày bắt đầu</label>
@@ -104,6 +105,7 @@
     </div>
 </div>
 
+<!-- Modal: Chi tiết công việc -->
 <div class="modal fade" id="taskDetailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -111,8 +113,7 @@
                 <h5 class="modal-title fw-bold">Chi tiết công việc</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="taskDetailContent">
-                </div>
+            <div class="modal-body" id="taskDetailContent"></div>
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary" id="editTaskBtn" style="background-color: #4285f4; border: none;">Sửa</button>
@@ -125,7 +126,7 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
 <script>
-    // eslint-disable-next-line
+    // Dữ liệu task từ server
     const tasksData = [
         <% if (tasks && tasks.length > 0) { %>
             <% tasks.forEach((task, index) => { %>
@@ -141,28 +142,24 @@
                     status: "<%= task.status %>",
                     color: "<%= getColorByStatus(task.status) %>",
                     attachments: "<%= task.attachments ? task.attachments.join(',') : '' %>",
-                    // Dữ liệu mới
                     creatorId: "<%= task.user && task.user._id ? task.user._id.toString() : '' %>",
                     creatorName: "<%= task.user && task.user.username ? task.user.username : 'Unknown' %>",
                     currentUserId: "<%= currentUserId %>",
                     visibility: "<%= task.visibility %>",
-                    // Lấy mảng comments (chuyển qua JSON để tránh lỗi dấu phẩy)
                     comments: <%- JSON.stringify(task.comments || []) %>
                 }<%= index < tasks.length - 1 ? ',' : '' %>
             <% }) %>
         <% } %>
     ];
-    
-    // eslint-disable-next-line
-    // Tách sự kiện nhiều ngày thành từng sự kiện riêng cho mỗi ngày
+
+    // Chuyển đổi dữ liệu cho FullCalendar (tách sự kiện nhiều ngày thành từng ngày)
     window.tasksData = (function() {
         const result = [];
-        
+
         tasksData.forEach(task => {
             const hasEndTime = task.endTime && task.endTime.trim() !== '';
             const isMultiDay = task.endDate && task.endDate !== task.date;
-            
-            // Tạo object extendedProps dùng chung
+
             const sharedProps = {
                 description: task.description,
                 status: task.status,
@@ -179,25 +176,16 @@
             };
 
             if (isMultiDay) {
-                // ✅ SỰ KIỆN NHIỀU NGÀY: Tách thành từng ngày riêng biệt
+                // Sự kiện nhiều ngày: tách thành từng ngày riêng biệt
                 const startDate = new Date(task.date + 'T00:00:00');
                 const endDate = new Date(task.endDate + 'T00:00:00');
-                
-                // Tính thời gian hiển thị
                 const displayTime = task.time || '00:00';
-                const displayEndTime = hasEndTime ? task.endTime : '';
-                const timeLabel = displayEndTime 
-                    ? displayTime + ' – ' + displayEndTime 
-                    : displayTime;
-                
-                // Lặp qua từng ngày từ start đến end
+
                 const current = new Date(startDate);
                 while (current <= endDate) {
                     const dateStr = current.toISOString().split('T')[0];
-                    
-                    // Tạo sự kiện cho từng ngày (hiển thị dưới dạng block trong ô ngày)
                     let dayStart, dayEnd;
-                    
+
                     if (task.time && task.time !== '00:00') {
                         dayStart = dateStr + 'T' + displayTime + ':00';
                         const endH = parseInt(displayTime.split(':')[0]) + 1;
@@ -220,11 +208,11 @@
                         display: 'block',
                         extendedProps: sharedProps
                     });
-                    
+
                     current.setDate(current.getDate() + 1);
                 }
             } else if (hasEndTime) {
-                // Sự kiện cùng ngày có cả giờ bắt đầu và kết thúc
+                // Sự kiện cùng ngày có giờ bắt đầu và kết thúc
                 result.push({
                     id: task.id,
                     title: task.title,
@@ -236,7 +224,7 @@
                     extendedProps: sharedProps
                 });
             } else if (task.time && task.time !== '00:00') {
-                // Sự kiện cùng ngày với giờ bắt đầu
+                // Sự kiện cùng ngày chỉ có giờ bắt đầu
                 const endH = parseInt(task.time.split(':')[0]) + 1;
                 result.push({
                     id: task.id,
@@ -264,7 +252,7 @@
                 });
             }
         });
-        
+
         return result;
     })();
 </script>

@@ -1,23 +1,23 @@
 const Task = require('../models/task');
-const User = require('../models/user'); // Cần import bảng User
+const User = require('../models/user');
 
-// [GET] Trang chủ - Load cả task được chia sẻ
+// [GET] Trang chủ - Hiển thị tất cả task (của mình + được chia sẻ)
 exports.getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({
             $or: [
-                { user: req.session.userId }, // Task của mình
-                { visibility: 'public' },     // Task công khai của người khác
-                { sharedWith: req.session.userId } // Task được người khác chia sẻ đích danh
+                { user: req.session.userId },
+                { visibility: 'public' },
+                { sharedWith: req.session.userId }
             ]
         })
-        .populate('user', 'username') // Lấy username của người tạo
+        .populate('user', 'username')
         .sort({ createdAt: -1 });
 
-        res.render('tasks/index', { 
-            tasks, 
+        res.render('tasks/index', {
+            tasks,
             username: req.session.username,
-            currentUserId: req.session.userId // Truyền id để phân quyền UI
+            currentUserId: req.session.userId
         });
     } catch (error) {
         console.error(error);
@@ -28,32 +28,33 @@ exports.getAllTasks = async (req, res) => {
 // [GET] Form thêm mới
 exports.getNewTaskForm = async (req, res) => {
     try {
-        const users = await User.find({ _id: { $ne: req.session.userId } }); // Lấy danh sách user khác mình
+        const users = await User.find({ _id: { $ne: req.session.userId } });
         res.render('tasks/new', { username: req.session.username, users });
     } catch (error) {
         res.redirect('/');
     }
 };
 
-// [POST] Xử lý thêm công việc
+// [POST] Thêm công việc
 exports.createTask = async (req, res) => {
     try {
         const { title, description, date, endDate, time, endTime, reminder, status, visibility, sharedWith } = req.body;
-        
+
         let attachments = [];
         if (req.files && req.files.length > 0) {
             attachments = req.files.map(file => '/uploads/' + file.filename);
         }
 
         const newTask = new Task({
-            title, description, date, endDate: endDate || date,
+            title, description, date,
+            endDate: endDate || date,
             time: time || '00:00', endTime,
             reminder: parseInt(reminder) || 0, status,
             user: req.session.userId, attachments,
             visibility: visibility || 'private',
             sharedWith: sharedWith ? (Array.isArray(sharedWith) ? sharedWith : [sharedWith]) : []
         });
-        
+
         await newTask.save();
         res.redirect('/');
     } catch (error) {
@@ -67,7 +68,7 @@ exports.getEditTaskForm = async (req, res) => {
     try {
         const task = await Task.findById(req.params.id);
         if (!task || task.user.toString() !== req.session.userId) {
-            return res.redirect('/'); // Chỉ chủ sở hữu mới được sửa
+            return res.redirect('/');
         }
         const users = await User.find({ _id: { $ne: req.session.userId } });
         res.render('tasks/edit', { task, username: req.session.username, users });
@@ -77,11 +78,11 @@ exports.getEditTaskForm = async (req, res) => {
     }
 };
 
-// [POST] Xử lý sửa
+// [POST] Cập nhật công việc
 exports.updateTask = async (req, res) => {
     try {
         const { title, description, date, endDate, time, endTime, reminder, status, visibility, sharedWith } = req.body;
-        
+
         const currentTask = await Task.findById(req.params.id);
         let updatedAttachments = currentTask.attachments || [];
 
@@ -90,10 +91,12 @@ exports.updateTask = async (req, res) => {
         }
 
         await Task.findOneAndUpdate(
-            { _id: req.params.id, user: req.session.userId }, 
-            { 
-                title, description, date, endDate: endDate || date, 
-                time, endTime, reminder: parseInt(reminder) || 0, status,
+            { _id: req.params.id, user: req.session.userId },
+            {
+                title, description, date,
+                endDate: endDate || date,
+                time, endTime,
+                reminder: parseInt(reminder) || 0, status,
                 attachments: updatedAttachments,
                 visibility: visibility || 'private',
                 sharedWith: sharedWith ? (Array.isArray(sharedWith) ? sharedWith : [sharedWith]) : []
@@ -106,7 +109,7 @@ exports.updateTask = async (req, res) => {
     }
 };
 
-// [POST] Xóa
+// [POST] Xóa công việc
 exports.deleteTask = async (req, res) => {
     try {
         await Task.findOneAndDelete({ _id: req.params.id, user: req.session.userId });
@@ -116,7 +119,7 @@ exports.deleteTask = async (req, res) => {
     }
 };
 
-// 👉 [POST] Xử lý thêm Comment
+// [POST] Thêm bình luận
 exports.addComment = async (req, res) => {
     try {
         const { text } = req.body;
