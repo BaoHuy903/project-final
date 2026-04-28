@@ -1,4 +1,16 @@
 // Calendar initialization and event handling
+
+// Helper: Format giờ dạng ngắn (vd: "03:00" -> "3am", "15:30" -> "3:30pm")
+function formatTimeShort(timeStr) {
+    if (!timeStr) return '';
+    const parts = timeStr.split(':');
+    let h = parseInt(parts[0]);
+    const m = parseInt(parts[1] || 0);
+    const suffix = h >= 12 ? 'pm' : 'am';
+    h = h % 12 || 12;
+    return m > 0 ? h + ':' + String(m).padStart(2, '0') + suffix : h + suffix;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Set task dot colors from data attribute
     const taskDots = document.querySelectorAll('.task-dot[data-color]');
@@ -23,6 +35,46 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: function(info) {
             showTaskDetail(info.event);
         },
+        // Hiển thị sự kiện dưới dạng block
+        eventDisplay: 'block',
+        eventTextColor: '#fff',
+        slotEventOverlap: false,
+
+        // ✅ TÙY CHỈNH NỘI DUNG SỰ KIỆN: Hiển thị tên + khoảng thời gian
+        eventContent: function(arg) {
+            const props = arg.event.extendedProps;
+            const title = arg.event.title || '';
+            const time = props.time || '';
+            const endTime = props.endTime || '';
+            
+            // Tạo label thời gian
+            let timeLabel = '';
+            if (time && time !== '00:00') {
+                // Format giờ dạng ngắn gọn (vd: 3 – 4am)
+                timeLabel = formatTimeShort(time);
+                if (endTime && endTime.trim() !== '') {
+                    timeLabel += ' – ' + formatTimeShort(endTime);
+                }
+            }
+
+            const container = document.createElement('div');
+            container.style.cssText = 'padding: 2px 4px; overflow: hidden; line-height: 1.3;';
+            
+            const titleEl = document.createElement('div');
+            titleEl.style.cssText = 'font-weight: 600; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff;';
+            titleEl.textContent = title;
+            container.appendChild(titleEl);
+            
+            if (timeLabel) {
+                const timeEl = document.createElement('div');
+                timeEl.style.cssText = 'font-size: 10px; opacity: 0.9; white-space: nowrap; color: #fff;';
+                timeEl.textContent = timeLabel;
+                container.appendChild(timeEl);
+            }
+            
+            return { domNodes: [container] };
+        },
+
         // SỰ KIỆN: Click vào ngày trên lịch để mở modal thêm công việc
         dateClick: function(info) {
             const dateInput = document.querySelector('#taskModal input[name="date"]');

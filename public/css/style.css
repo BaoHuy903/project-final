@@ -176,19 +176,52 @@ html, body {
     min-height: 100px;
 }
 
+/* Sự kiện cả ngày hoặc sự kiện nhiều ngày */
+.fc .fc-daygrid-day-events {
+    margin-bottom: 0;
+}
+
 .fc-event {
-    border-radius: 6px !important;
-    padding: 4px 6px !important;
-    font-size: 12px;
+    border-radius: 4px !important;
+    padding: 3px 6px !important;
+    font-size: 11px !important;
     font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border: none !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.95;
+}
+
+.fc-event:hover {
+    opacity: 1;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    transform: translateY(-1px);
 }
 
 .fc-event-title {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 0 4px;
-    white-space: normal;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 3px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+/* Sự kiện cả ngày (all-day events) */
+.fc .fc-daygrid-day-frame .fc-daygrid-day-events .fc-event {
+    margin-bottom: 2px;
+}
+
+/* Sự kiện kéo dài nhiều ngày */
+.fc .fc-daygrid-block-event {
+    border-radius: 4px !important;
+}
+
+.fc .fc-daygrid-block-event .fc-event-title {
+    padding: 1px 3px !important;
 }
 
 /* Modal Styling */
