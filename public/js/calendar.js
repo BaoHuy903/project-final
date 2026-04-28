@@ -25,7 +25,7 @@ function getStatusColor(status) {
 
 // ===== KHỞI TẠO LỊCH =====
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Gán màu cho dot trạng thái
     document.querySelectorAll('.task-dot[data-color]').forEach(dot => {
         dot.style.backgroundColor = dot.getAttribute('data-color');
@@ -48,13 +48,19 @@ document.addEventListener('DOMContentLoaded', function() {
         eventTextColor: '#fff',
         slotEventOverlap: false,
         locale: 'vi',
+        nowIndicator: true,
+        scrollTime: '07:00:00',
+        slotMinTime: '06:00:00',
+        slotMaxTime: '23:00:00',
+        allDayText: 'Cả ngày',
+        slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
 
-        eventClick: function(info) {
+        eventClick: function (info) {
             showTaskDetail(info.event);
         },
 
         // Tùy chỉnh nội dung hiển thị: Tiêu đề + khoảng thời gian
-        eventContent: function(arg) {
+        eventContent: function (arg) {
             const props = arg.event.extendedProps;
             const title = arg.event.title || '';
             const time = props.time || '';
@@ -86,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return { domNodes: [container] };
         },
 
-        dateClick: function(info) {
+        dateClick: function (info) {
             const dateInput = document.querySelector('#taskModal input[name="date"]');
             const endDateInput = document.querySelector('#taskModal input[name="endDate"]');
             if (dateInput) dateInput.value = info.dateStr;
