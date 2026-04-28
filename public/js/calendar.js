@@ -146,70 +146,9 @@ function showTaskDetail(event) {
         : (props.visibility === 'shared' ? '👥 Được chia sẻ' : '🔒 Cá nhân');
     const creatorName = props.creatorName || 'Không xác định';
 
-    // File đính kèm
-    let attachmentsHtml = '';
-    if (props.attachments) {
-        const files = props.attachments.split(',').filter(f => f.trim() !== '');
-        if (files.length > 0) {
-            attachmentsHtml = `<h6 style="color: #5f6368; margin-bottom: 8px; margin-top: 16px;">Tệp đính kèm</h6><ul style="list-style: none; padding: 0;">`;
-            files.forEach(file => {
-                const fileName = file.split('/').pop();
-                const ext = fileName.split('.').pop().toLowerCase();
-                const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
-
-                if (isImage) {
-                    attachmentsHtml += `
-                        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-                            <img src="${file}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; margin-right: 10px;">
-                            <a href="${file}" target="_blank" style="text-decoration: none; color: #1a73e8; word-break: break-all;">${fileName}</a>
-                        </li>`;
-                } else {
-                    let icon = '📄';
-                    if (ext === 'pdf') icon = '📕';
-                    if (['doc', 'docx'].includes(ext)) icon = '📘';
-                    if (['xls', 'xlsx'].includes(ext)) icon = '📗';
-                    attachmentsHtml += `
-                        <li style="margin-bottom: 10px; display: flex; align-items: center;">
-                            <span style="font-size: 24px; margin-right: 10px;">${icon}</span>
-                            <a href="${file}" target="_blank" style="text-decoration: none; color: #1a73e8; word-break: break-all;">${fileName}</a>
-                        </li>`;
-                }
-            });
-            attachmentsHtml += '</ul>';
-        }
-    }
-
-    // Bình luận
-    const comments = props.comments || [];
-    let commentsHtml = `
-        <div class="mt-4 pt-3 border-top">
-            <h6 style="color: #5f6368; margin-bottom: 12px;"><i class="bi bi-chat-dots"></i> Bình luận (${comments.length})</h6>
-            <div style="max-height: 200px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`;
-
-    if (comments.length === 0) {
-        commentsHtml += `<p style="font-size: 0.9rem; color: #aaa; margin: 0; text-align: center;">Chưa có bình luận nào.</p>`;
-    } else {
-        comments.forEach(c => {
-            const date = new Date(c.createdAt).toLocaleString('vi-VN');
-            const isMyComment = c.userId === props.currentUserId;
-            const align = isMyComment ? 'text-end' : 'text-start';
-            const bg = isMyComment ? '#d2e3fc' : '#e8eaed';
-            commentsHtml += `
-                <div class="${align} mb-3">
-                    <small style="font-weight: bold; color: #555;">${c.username}</small>
-                    <small style="color: #888; font-size: 0.7rem; margin-left: 5px;">(${date})</small>
-                    <div style="background: ${bg}; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 80%; text-align: left; margin-top: 4px;">
-                        ${c.text}
-                    </div>
-                </div>`;
-        });
-    }
-    commentsHtml += `</div>
-        <form action="/comment/${event.id}" method="POST" class="d-flex">
-            <input type="text" name="text" class="form-control me-2" placeholder="Nhập bình luận..." required style="border-radius: 20px;">
-            <button type="submit" class="btn btn-primary" style="border-radius: 20px; white-space: nowrap;">Gửi</button>
-        </form>
-    </div>`;
+    // File đính kèm và Bình luận (đã được tách hàm để code gọn hơn)
+    const attachmentsHtml = renderAttachments(props.attachments);
+    const commentsHtml = renderComments(props.comments, props.currentUserId, event.id);
 
     // Ghép giao diện
     content.innerHTML = `
@@ -275,6 +214,74 @@ function showTaskDetail(event) {
 
 function goToDate(dateStr) {
     console.log('Navigate to:', dateStr);
+}
+
+// ===== HELPER FUNCTIONS CHO UI =====
+
+function renderAttachments(attachmentsStr) {
+    if (!attachmentsStr) return '';
+    const files = attachmentsStr.split(',').filter(f => f.trim() !== '');
+    if (files.length === 0) return '';
+
+    let html = `<h6 style="color: #5f6368; margin-bottom: 8px; margin-top: 16px;">Tệp đính kèm</h6><ul style="list-style: none; padding: 0;">`;
+    files.forEach(file => {
+        const fileName = file.split('/').pop();
+        const ext = fileName.split('.').pop().toLowerCase();
+        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
+
+        if (isImage) {
+            html += `
+                <li style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <img src="${file}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; margin-right: 10px;">
+                    <a href="${file}" target="_blank" style="text-decoration: none; color: #1a73e8; word-break: break-all;">${fileName}</a>
+                </li>`;
+        } else {
+            let icon = '📄';
+            if (ext === 'pdf') icon = '📕';
+            if (['doc', 'docx'].includes(ext)) icon = '📘';
+            if (['xls', 'xlsx'].includes(ext)) icon = '📗';
+            html += `
+                <li style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <span style="font-size: 24px; margin-right: 10px;">${icon}</span>
+                    <a href="${file}" target="_blank" style="text-decoration: none; color: #1a73e8; word-break: break-all;">${fileName}</a>
+                </li>`;
+        }
+    });
+    return html + '</ul>';
+}
+
+function renderComments(commentsArr, currentUserId, taskId) {
+    const comments = commentsArr || [];
+    let html = `
+        <div class="mt-4 pt-3 border-top">
+            <h6 style="color: #5f6368; margin-bottom: 12px;"><i class="bi bi-chat-dots"></i> Bình luận (${comments.length})</h6>
+            <div style="max-height: 200px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 15px;">`;
+
+    if (comments.length === 0) {
+        html += `<p style="font-size: 0.9rem; color: #aaa; margin: 0; text-align: center;">Chưa có bình luận nào.</p>`;
+    } else {
+        comments.forEach(c => {
+            const date = new Date(c.createdAt).toLocaleString('vi-VN');
+            const isMyComment = c.userId === currentUserId;
+            const align = isMyComment ? 'text-end' : 'text-start';
+            const bg = isMyComment ? '#d2e3fc' : '#e8eaed';
+            html += `
+                <div class="${align} mb-3">
+                    <small style="font-weight: bold; color: #555;">${c.username}</small>
+                    <small style="color: #888; font-size: 0.7rem; margin-left: 5px;">(${date})</small>
+                    <div style="background: ${bg}; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 80%; text-align: left; margin-top: 4px;">
+                        ${c.text}
+                    </div>
+                </div>`;
+        });
+    }
+    html += `</div>
+        <form action="/comment/${taskId}" method="POST" class="d-flex">
+            <input type="text" name="text" class="form-control me-2" placeholder="Nhập bình luận..." required style="border-radius: 20px;">
+            <button type="submit" class="btn btn-primary" style="border-radius: 20px; white-space: nowrap;">Gửi</button>
+        </form>
+    </div>`;
+    return html;
 }
 
 // ===== HỆ THỐNG THÔNG BÁO =====

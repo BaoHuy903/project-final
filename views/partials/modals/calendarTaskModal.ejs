@@ -1,0 +1,73 @@
+<!-- Modal: Thêm công việc -->
+<div class="modal fade" id="taskModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Thêm công việc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/new" method="POST" enctype="multipart/form-data" id="taskForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Tiêu đề công việc</label>
+                        <input type="text" class="form-control" name="title" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Mô tả</label>
+                        <textarea class="form-control" name="description" rows="3" style="border-radius: 8px; border: 1px solid #dadce0;"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" name="date" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Giờ bắt đầu</label>
+                            <input type="time" class="form-control" name="time" required style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Ngày kết thúc</label>
+                            <input type="date" class="form-control" name="endDate" style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Giờ kết thúc</label>
+                            <input type="time" class="form-control" name="endTime" style="border-radius: 8px; border: 1px solid #dadce0;">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Thông báo trước</label>
+                            <select class="form-control" name="reminder" style="border-radius: 8px; border: 1px solid #dadce0;">
+                                <option value="0">Không thông báo</option>
+                                <option value="10">10 phút</option>
+                                <option value="15">15 phút</option>
+                                <option value="30">30 phút</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-500">Trạng thái</label>
+                            <select class="form-control" name="status" style="border-radius: 8px; border: 1px solid #dadce0;">
+                                <option value="Cần làm">Cần làm</option>
+                                <option value="Đang làm">Đang làm</option>
+                                <option value="Hoàn thành">Hoàn thành</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-500">Đính kèm</label>
+                        <input type="file" name="attachments" class="form-control" multiple>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #4285f4; border: none;">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
