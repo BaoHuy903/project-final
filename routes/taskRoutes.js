@@ -23,7 +23,7 @@ const fileFilter = (req, file, cb) => {
     if (extname) {
         return cb(null, true);
     } else {
-        cb(new Error('Chỉ cho phép upload file ảnh và văn bản!'));
+        cb(new Error('Chỉ Uoload các file hình ảnh và tài liệu! cơ bản thôi nhé!!!!!!!!!!!!!!!!!'));
     }
 };
 
